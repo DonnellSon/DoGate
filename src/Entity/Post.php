@@ -188,7 +188,7 @@ class Post extends CommentableEntity
         return $this->evaluations;
     }
 
-    public function addEvaluation(evaluation $evaluation): static
+    public function addEvaluation(PostEvaluation $evaluation): static
     {
         if (!$this->evaluations->contains($evaluation)) {
             $this->evaluations->add($evaluation);

@@ -89,9 +89,9 @@ class Investissement
     #[Groups(['posts_read','image_read', 'invest_read'])]
     private ?Author $author = null;
 
-    #[ORM\OneToMany(mappedBy: 'investissement', targetEntity: InvestPicture::class)]
+    #[ORM\OneToMany(mappedBy: 'invest', targetEntity: InvestPicture::class)]
     #[Groups(['image_read', 'invest_read'])]
-    private Collection $InvestPicture;
+    private Collection $investPictures;
 
 
     public function __construct()

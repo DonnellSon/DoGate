@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Invest;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
@@ -61,8 +62,8 @@ class InvestPicture
     #[ORM\Column(length: 255)]
     private ?string $fileSize = null;
 
-    #[ORM\ManyToOne(inversedBy: 'InvestPicture')]
-    private ?Investissement $investissement = null;
+    #[ORM\ManyToOne(inversedBy: 'investPictures')]
+    private ?Invest $invest = null;
 
     public function __construct()
     {

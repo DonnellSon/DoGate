@@ -1,0 +1,10 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\Entity\RefreshToken
+    cookie:
+      enabled: true
+      same_site: lax
+      path: /     
+      domain: localhost
+      http_only: true
+      secure: true
+      remove_token_from_body: true

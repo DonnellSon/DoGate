@@ -56,7 +56,7 @@ class CreateInvestController extends AbstractController
                 $mediaObject->setCreatedAt((new \DateTimeImmutable())->modify("+$i second"));
                 $mediaObject->setFile($uploadedInvestPicture);
                 $invest->addInvestPicture($mediaObject);
-                $mediaObject->setInvestissement($invest);
+                $mediaObject->setInvest($invest);
                 $this->entityManager->persist($mediaObject);
             }
         }

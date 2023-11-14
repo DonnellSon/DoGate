@@ -6,17 +6,17 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\InvestissementRepository;
+use App\Repository\InvestRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/api/investissement', name: 'get_investissement')]
 class GetInvestmentsController extends AbstractController
 {
-    private $investissementRepository;
+    private $investRepository;
 
-    public function __construct(InvestissementRepository $investRepository)
+    public function __construct(InvestRepository $investRepository)
     {
-        $this->investissementRepository = $investRepository;
+        $this->investRepository = $investRepository;
     }
 
     #[Route('', methods: ['GET'])]
@@ -28,7 +28,7 @@ class GetInvestmentsController extends AbstractController
             return new JsonResponse(['error' => 'Le paramètre "companyType" est manquant.'], 400);
         }
 
-        $investments = $this->investissementRepository->findByCompanyType($companyType);
+        $investments = $this->investRepository->findByCompanyType($companyType);
 
         return $this->json(['investments' => $investments]);
     }

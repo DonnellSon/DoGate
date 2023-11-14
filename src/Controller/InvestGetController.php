@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Investissement;
+use App\Entity\Invest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Vich\UploaderBundle\Handler\UploadHandler;

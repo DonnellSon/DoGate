@@ -17,7 +17,7 @@ use App\Filter\InvestCustomsSearchFilter;
 use App\Controller\CreateInvestController;
 use Doctrine\Common\Collections\Collection;
 use App\Controller\GetInvestmentsController;
-use App\Repository\InvestissementRepository;
+use App\Repository\InvestRepository;
 use ApiPlatform\Metadata\Post as MetadataPost;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,7 +25,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: InvestissementRepository::class)]
+#[ORM\Entity(repositoryClass: InvestRepository::class)]
 #[HasLifecycleCallbacks]
 #[ApiResource(
     normalizationContext: [
@@ -45,7 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
-class Investissement
+class Invest
 {
     #[ORM\Id]
     #[ORM\Column(type: "string", unique: true)]
@@ -205,7 +205,7 @@ class Investissement
     {
         if (!$this->InvestPicture->contains($investPicture)) {
             $this->InvestPicture->add($investPicture);
-            $investPicture->setInvestissement($this);
+            $investPicture->setInvest($this);
         }
 
         return $this;
@@ -214,8 +214,8 @@ class Investissement
     public function removeInvestPicture(InvestPicture $investPicture): static
     {
         if ($this->InvestPicture->removeElement($investPicture)) {
-            if ($investPicture->getInvestissement() === $this) {
-                $investPicture->setInvestissement(null);
+            if ($investPicture->getInvest() === $this) {
+                $investPicture->setInvest(null);
             }
         }
 

@@ -57,14 +57,14 @@ class Domaine
     }
 
     /**
-     * @return Collection<int, Investissement>
+     * @return Collection<int, Invest>
      */
     public function getInvest(): Collection
     {
         return $this->Invest;
     }
 
-    public function addInvest(Investissement $invest): static
+    public function addInvest(Invest $invest): static
     {
         if (!$this->Invest->contains($invest)) {
             $this->Invest->add($invest);
@@ -73,7 +73,7 @@ class Domaine
         return $this;
     }
 
-    public function removeInvest(Investissement $invest): static
+    public function removeInvest(Invest $invest): static
     {
         $this->Invest->removeElement($invest);
 

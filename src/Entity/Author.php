@@ -79,7 +79,7 @@ abstract class Author
         $this->posts = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->companies = new ArrayCollection();
-        $this->investissements = new ArrayCollection();
+        $this->invests = new ArrayCollection();
         $this->sentRequests = new ArrayCollection();
         $this->receivedRequests = new ArrayCollection();
         $this->jobOffers = new ArrayCollection();
@@ -185,27 +185,27 @@ abstract class Author
     /**
      * @return Collection<int, investissement>
      */
-    public function getInvestissements(): Collection
+    public function getInvests(): Collection
     {
-        return $this->investissements;
+        return $this->invests;
     }
 
-    public function addInvestissement(Investissement $investissement): static
+    public function addInvest(Invest $invest): static
     {
-        if (!$this->investissements->contains($investissement)) {
-            $this->investissements->add($investissement);
-            $investissement->setAuthor($this);
+        if (!$this->invests->contains($invest)) {
+            $this->invests->add($invest);
+            $invest->setAuthor($this);
         }
     
         return $this;
     }
     
-    public function removeInvestissement(Investissement $investissement): static
+    public function removeInvest(Invest $invest): static
     {
-        if ($this->investissements->removeElement($investissement)) {
+        if ($this->invests->removeElement($invest)) {
             // set the owning side to null (unless already changed)
-            if ($investissement->getAuthor() === $this) {
-                $investissement->setAuthor(null);
+            if ($invest->getAuthor() === $this) {
+                $invest->setAuthor(null);
             }
         }
     

@@ -8,7 +8,7 @@ use App\Entity\Company;
 use App\Entity\Message;
 use App\Entity\Discussion;
 use App\Entity\CommentReply;
-use App\Entity\Investissement;
+use App\Entity\Invest;
 use App\Entity\PostEvaluation;
 use App\Entity\ProfilePicture;
 use Symfony\Component\Uid\Uuid;
@@ -41,7 +41,7 @@ class PostUserSubscriber implements EventSubscriberInterface
                 || $event->getControllerResult() instanceof Comment
                 || $event->getControllerResult() instanceof CommentReply
                 || $event->getControllerResult() instanceof Company
-                || ($event->getControllerResult() instanceof Investissement && !$event->getControllerResult()->getAuthor())
+                || ($event->getControllerResult() instanceof Invest && !$event->getControllerResult()->getAuthor())
                 || $event->getControllerResult() instanceof Message
                 || ($event->getControllerResult() instanceof PostEvaluation))
             && ($method === 'POST')

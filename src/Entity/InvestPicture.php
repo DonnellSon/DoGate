@@ -168,15 +168,15 @@ class InvestPicture
         return $this;
     }
 
-    public function getInvestissement(): ?Investissement
+    public function getInvest(): ?Invest
     {
         
-        return $this->investissement;
+        return $this->invest;
     }
 
-    public function setInvestissement(?Investissement $investissement): static
+    public function setInvest(?Invest $invest): static
     {
-        $this->investissement = $investissement;
+        $this->invest = $invest;
 
         return $this;
     }

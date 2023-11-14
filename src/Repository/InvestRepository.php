@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Investissement;
+use App\Entity\Invest;
 use App\Entity\Company;
 use App\Entity\CompanyType;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @extends ServiceEntityRepository<Investissement>
+ * @extends ServiceEntityRepository<Invest>
  *
- * @method Investissement|null find($id, $lockMode = null, $lockVersion = null)
- * @method Investissement|null findOneBy(array $criteria, array $orderBy = null)
- * @method Investissement[]    findAll()
- * @method Investissement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Invest|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Invest|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Invest[]    findAll()
+ * @method Invest[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InvestissementRepository extends ServiceEntityRepository
+class InvestRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Investissement::class);
+        parent::__construct($registry, Invest::class);
     }
 
 
@@ -40,7 +40,7 @@ class InvestissementRepository extends ServiceEntityRepository
 
 
 //    /**
-//     * @return Investissement[] Returns an array of Investissement objects
+//     * @return Invest[] Returns an array of Invest objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class InvestissementRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Investissement
+//    public function findOneBySomeField($value): ?Invest
 //    {
 //        return $this->createQueryBuilder('i')
 //            ->andWhere('i.exampleField = :val')

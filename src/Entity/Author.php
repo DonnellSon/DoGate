@@ -3,23 +3,23 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use App\Entity\Invest;
 use App\Entity\Company;
 use App\Entity\Contact;
 use ApiPlatform\Metadata\Get;
 use App\Config\ContactStatus;
-use App\Entity\Investissement;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\Mapping\JoinColumn;
 use ApiPlatform\Metadata\ApiResource;
+use App\Controller\AcceptContactController;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\InverseJoinColumn;
+use ApiPlatform\Metadata\Post as PostMetadata;
 use App\Controller\GetAuthorContactsController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\Post as PostMetadata;
-use App\Controller\AcceptContactController;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 #[ApiResource(
@@ -58,9 +58,9 @@ abstract class Author
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Company::class, orphanRemoval: true)]
     private Collection $companies;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Investissement::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Invest::class, orphanRemoval: true)]
     #[Groups([ 'ct_read'])]
-    private Collection $investissements;
+    private Collection $invests;
 
     #[ORM\OneToMany(targetEntity:Contact::class, mappedBy:"requester")]
     private $sentRequests;

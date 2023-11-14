@@ -152,7 +152,6 @@ class Company extends Author
     {
         $this->domains = new ArrayCollection();
         $this->companyLogo = new ArrayCollection();
-        $this->evaluations = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -181,10 +180,10 @@ class Company extends Author
 
     public function getPays(): ?string
     {
-        return $this->Pays;
+        return $this->pays;
     }
 
-    public function setPays(string $Pays): static
+    public function setPays(string $pays): static
     {
         $this->pays = $pays;
 
@@ -196,7 +195,7 @@ class Company extends Author
         return $this->nifStat;
     }
 
-    public function setNifStat(string $NifStat): static
+    public function setNifStat(string $nifStat): static
     {
         $this->nifStat = $nifStat;
 

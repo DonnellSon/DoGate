@@ -183,7 +183,7 @@ abstract class Author
     }
 
     /**
-     * @return Collection<int, investissement>
+     * @return Collection<int, invest>
      */
     public function getInvests(): Collection
     {

@@ -4,14 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\DomaineRepository;
+use App\Repository\DomainRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: DomaineRepository::class)]
+#[ORM\Entity(repositoryClass: DomainRepository::class)]
 #[ApiResource()]
-class Domaine
+class Domain
 {
     #[ORM\Id]
     #[ORM\Column(type: "string", unique: true)]
@@ -24,11 +24,11 @@ class Domaine
     #[Groups(['company_read','invest_read','job_offers_read'])]
     private ?string $title = null;
 
-    #[ORM\ManyToMany(targetEntity: Investissement::class, inversedBy: 'domaines')]
+    #[ORM\ManyToMany(targetEntity: Invest::class, inversedBy: 'domains')]
     #[ORM\JoinColumn(nullable:false, onDelete:"CASCADE")]
     private Collection $invest;
 
-    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'domaine')]
+    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'domains')]
     #[ORM\JoinColumn(nullable:false, onDelete:"CASCADE")]
     private Collection $companies;
 
@@ -92,7 +92,7 @@ class Domaine
     {
         if (!$this->companies->contains($company)) {
             $this->companies->add($company);
-            $company->addDomaine($this);
+            $company->addDomain($this);
         }
 
         return $this;
@@ -101,7 +101,7 @@ class Domaine
     public function removeCompany(Company $company): static
     {
         if ($this->companies->removeElement($company)) {
-            $company->removeDomaine($this);
+            $company->removeDomain($this);
         }
 
         return $this;

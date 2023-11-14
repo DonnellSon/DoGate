@@ -22,7 +22,7 @@ class InvestGetController extends AbstractController
 
     public function __invoke()
     {
-        $repository = $this->entityManager->getRepository(Investissement::class);
+        $repository = $this->entityManager->getRepository(Invest::class);
         $items = $repository->findAll();
 
         if (count($items) === 0) {

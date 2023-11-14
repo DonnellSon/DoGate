@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InvestRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-#[Route('/api/investissement', name: 'get_investissement')]
+#[Route('/api/invest', name: 'get_invest')]
 class GetInvestmentsController extends AbstractController
 {
     private $investRepository;

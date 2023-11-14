@@ -41,7 +41,7 @@ class CreateCompanyController extends AbstractController
 
         if ($domains = $req->get('domains')) {
             foreach ($domains as $domain) {
-                $company->addDomaine($this->iriConverter->getResourceFromIri($domain));
+                $company->addDomain($this->iriConverter->getResourceFromIri($domain));
             }
         }
 

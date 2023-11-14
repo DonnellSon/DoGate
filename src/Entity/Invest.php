@@ -79,10 +79,10 @@ class Invest
     #[Groups(['company_read', 'invest_read'])]
     private ?string $collected = null;
 
-    #[ORM\ManyToMany(targetEntity: Domaine::class, mappedBy: 'invest')]
-    #[ORM\JoinColumn(name: "domaine-invest")]
+    #[ORM\ManyToMany(targetEntity: Domain::class, mappedBy: 'invest')]
+    #[ORM\JoinColumn(name: "domain-invest")]
     #[Groups(['company_read', 'invest_read'])]
-    private Collection $domaines;
+    private Collection $domains;
 
     #[ORM\ManyToOne(targetEntity:Author::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -96,7 +96,7 @@ class Invest
 
     public function __construct()
     {
-        $this->domaines = new ArrayCollection();
+        $this->domains = new ArrayCollection();
         $this->InvestPicture = new ArrayCollection();
     }
 
@@ -155,27 +155,27 @@ class Invest
 
 
     /**
-     * @return Collection<int, Domaine>
+     * @return Collection<int, Domain>
      */
-    public function getDomaines(): Collection
+    public function getDomains(): Collection
     {
-        return $this->domaines;
+        return $this->domains;
     }
 
-    public function addDomaine(Domaine $domaine): static
+    public function addDomain(Domain $domain): static
     {
-        if (!$this->domaines->contains($domaine)) {
-            $this->domaines->add($domaine);
-            $domaine->addInvest($this);
+        if (!$this->domains->contains($domain)) {
+            $this->domains->add($domain);
+            $domain->addInvest($this);
         }
 
         return $this;
     }
 
-    public function removeDomaine(Domaine $domaine): static
+    public function removeDomain(Domain $domain): static
     {
-        if ($this->domaines->removeElement($domaine)) {
-            $domaine->removeInvest($this);
+        if ($this->domains->removeElement($domain)) {
+            $domain->removeInvest($this);
         }
 
         return $this;

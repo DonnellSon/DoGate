@@ -44,7 +44,7 @@ class CreateInvestController extends AbstractController
 
         if ($domains = $req->get('domains')) {
             foreach ($domains as $domain) {
-                $invest->addDomaine($this->iriConverter->getResourceFromIri($domain));
+                $invest->addDomain($this->iriConverter->getResourceFromIri($domain));
             }
         }
 

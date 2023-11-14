@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Author;
-use App\Entity\Domaine;
+use App\Entity\Domain;
 use App\Entity\Evaluation;
 use App\Entity\CompanyLogo;
 use ApiPlatform\Metadata\Get;
@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact', 'Domaine' => 'iexacte', 'companySize.size' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact', 'domain' => 'iexacte', 'companySize.size' => 'exact'])]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['company_read']
@@ -114,9 +114,9 @@ class Company extends Author
     #[Groups(['company_read', 'invest_read'])]
     private ?string $webSite = null;
 
-    #[ORM\ManyToMany(targetEntity: Domaine::class, inversedBy: 'companies')]
+    #[ORM\ManyToMany(targetEntity: Domain::class, inversedBy: 'companies')]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private Collection $domaine;
+    private Collection $domains;
 
     #[ORM\OneToMany(mappedBy: 'Company', targetEntity: CompanyLogo::class, orphanRemoval: true)]
     #[Groups(['users_read', 'posts_read', 'image_read', 'company_read', 'invest_read'])]
@@ -150,31 +150,31 @@ class Company extends Author
 
     public function __construct()
     {
-        $this->Domaine = new ArrayCollection();
+        $this->domains = new ArrayCollection();
         $this->companyLogo = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
     }
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): static
+    public function setName(string $name): static
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getAdress(): ?string
     {
-        return $this->Adress;
+        return $this->adress;
     }
 
-    public function setAdress(string $Adress): static
+    public function setAdress(string $adress): static
     {
-        $this->Adress = $Adress;
+        $this->adress = $adress;
 
         return $this;
     }
@@ -186,19 +186,19 @@ class Company extends Author
 
     public function setPays(string $Pays): static
     {
-        $this->Pays = $Pays;
+        $this->pays = $pays;
 
         return $this;
     }
 
     public function getNifStat(): ?string
     {
-        return $this->NifStat;
+        return $this->nifStat;
     }
 
     public function setNifStat(string $NifStat): static
     {
-        $this->NifStat = $NifStat;
+        $this->nifStat = $nifStat;
 
         return $this;
     }
@@ -264,25 +264,25 @@ class Company extends Author
     }
 
     /**
-     * @return Collection<int, Domaine>
+     * @return Collection<int, Domain>
      */
-    public function getDomaine(): Collection
+    public function getdomains(): Collection
     {
-        return $this->Domaine;
+        return $this->domains;
     }
 
-    public function addDomaine(Domaine $domaine): static
+    public function addDomain(Domain $domain): static
     {
-        if (!$this->Domaine->contains($domaine)) {
-            $this->Domaine->add($domaine);
+        if (!$this->domains->contains($domain)) {
+            $this->domains->add($domain);
         }
 
         return $this;
     }
 
-    public function removeDomaine(Domaine $domaine): static
+    public function removeDomain(Domain $domain): static
     {
-        $this->Domaine->removeElement($domaine);
+        $this->domains->removeElement($domain);
 
         return $this;
     }

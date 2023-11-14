@@ -79,7 +79,7 @@ class Investissement
     #[Groups(['company_read', 'invest_read'])]
     private ?string $collected = null;
 
-    #[ORM\ManyToMany(targetEntity: Domaine::class, mappedBy: 'Invest')]
+    #[ORM\ManyToMany(targetEntity: Domaine::class, mappedBy: 'invest')]
     #[ORM\JoinColumn(name: "domaine-invest")]
     #[Groups(['company_read', 'invest_read'])]
     private Collection $domaines;

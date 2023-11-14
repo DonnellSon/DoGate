@@ -26,9 +26,9 @@ class Domaine
 
     #[ORM\ManyToMany(targetEntity: Investissement::class, inversedBy: 'domaines')]
     #[ORM\JoinColumn(nullable:false, onDelete:"CASCADE")]
-    private Collection $Invest;
+    private Collection $invest;
 
-    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'Domaine')]
+    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'domaine')]
     #[ORM\JoinColumn(nullable:false, onDelete:"CASCADE")]
     private Collection $companies;
 

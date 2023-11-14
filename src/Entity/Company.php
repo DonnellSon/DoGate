@@ -65,28 +65,28 @@ class Company extends Author
         'message' => 'ce champ est obligatoire'
     ])]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private ?string $Name = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank([
         'message' => 'ce champ est obligatoire'
     ])]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private ?string $Adress = null;
+    private ?string $adress = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank([
         'message' => 'ce champ est obligatoire'
     ])]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private ?string $Pays = null;
+    private ?string $pays = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank([
         'message' => 'ce champ est obligatoire'
     ])]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private ?string $NifStat = null;
+    private ?string $nifStat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['company_read', 'invest_read'])]
@@ -116,7 +116,7 @@ class Company extends Author
 
     #[ORM\ManyToMany(targetEntity: Domaine::class, inversedBy: 'companies')]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private Collection $Domaine;
+    private Collection $domaine;
 
     #[ORM\OneToMany(mappedBy: 'Company', targetEntity: CompanyLogo::class, orphanRemoval: true)]
     #[Groups(['users_read', 'posts_read', 'image_read', 'company_read', 'invest_read'])]

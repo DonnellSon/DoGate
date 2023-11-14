@@ -34,7 +34,7 @@ class Domain
 
     public function __construct()
     {
-        $this->Invest = new ArrayCollection();
+        $this->invest = new ArrayCollection();
         $this->companies = new ArrayCollection();
     }
 
@@ -61,13 +61,13 @@ class Domain
      */
     public function getInvest(): Collection
     {
-        return $this->Invest;
+        return $this->invest;
     }
 
     public function addInvest(Invest $invest): static
     {
-        if (!$this->Invest->contains($invest)) {
-            $this->Invest->add($invest);
+        if (!$this->invest->contains($invest)) {
+            $this->invest->add($invest);
         }
 
         return $this;
@@ -75,7 +75,7 @@ class Domain
 
     public function removeInvest(Invest $invest): static
     {
-        $this->Invest->removeElement($invest);
+        $this->invest->removeElement($invest);
 
         return $this;
     }

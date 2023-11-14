@@ -4,12 +4,13 @@ namespace App\Entity;
 use App\Entity\Post;
 
 use App\Entity\Evaluation;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post as PostMetadata;
-use ApiPlatform\Metadata\Get;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity]

@@ -7,6 +7,7 @@ use App\Entity\Thumbnail;
 use App\Entity\Evaluation;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
+use App\Entity\PostEvaluation;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
@@ -188,7 +189,7 @@ class Post extends CommentableEntity
         return $this->evaluations;
     }
 
-    public function addEvaluation(evaluation $evaluation): static
+    public function addEvaluation(PostEvaluation $evaluation): static
     {
         if (!$this->evaluations->contains($evaluation)) {
             $this->evaluations->add($evaluation);

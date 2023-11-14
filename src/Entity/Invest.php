@@ -45,6 +45,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
+
+
 class Invest
 {
     #[ORM\Id]
@@ -97,7 +99,7 @@ class Invest
     public function __construct()
     {
         $this->domains = new ArrayCollection();
-        $this->investPicture = new ArrayCollection();
+        $this->investPictures = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -204,8 +206,8 @@ class Invest
     public function addInvestPicture(InvestPicture $investPicture): static
     {
         if (!$this->investPictures->contains($investPicture)) {
-            $this->InvestPictures->add($investPicture);
-            $investPictures->setInvest($this);
+            $this->investPictures->add($investPicture);
+            $investPicture->setInvest($this);
         }
 
         return $this;
@@ -213,9 +215,9 @@ class Invest
 
     public function removeInvestPicture(InvestPicture $investPicture): static
     {
-        if ($this->InvestPictures->removeElement($investPicture)) {
-            if ($investPictures->getInvest() === $this) {
-                $investPictures->setInvest(null);
+        if ($this->investPictures->removeElement($investPicture)) {
+            if ($investPicture->getInvest() === $this) {
+                $investPicture->setInvest(null);
             }
         }
 

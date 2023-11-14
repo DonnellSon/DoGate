@@ -97,7 +97,7 @@ class Invest
     public function __construct()
     {
         $this->domains = new ArrayCollection();
-        $this->InvestPicture = new ArrayCollection();
+        $this->investPicture = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -196,16 +196,16 @@ class Invest
     /**
      * @return Collection<int, InvestPicture>
      */
-    public function getInvestPicture(): Collection
+    public function getInvestPictures(): Collection
     {
-        return $this->InvestPicture;
+        return $this->investPictures;
     }
 
     public function addInvestPicture(InvestPicture $investPicture): static
     {
-        if (!$this->InvestPicture->contains($investPicture)) {
-            $this->InvestPicture->add($investPicture);
-            $investPicture->setInvest($this);
+        if (!$this->investPictures->contains($investPicture)) {
+            $this->InvestPictures->add($investPicture);
+            $investPictures->setInvest($this);
         }
 
         return $this;
@@ -213,9 +213,9 @@ class Invest
 
     public function removeInvestPicture(InvestPicture $investPicture): static
     {
-        if ($this->InvestPicture->removeElement($investPicture)) {
-            if ($investPicture->getInvest() === $this) {
-                $investPicture->setInvest(null);
+        if ($this->InvestPictures->removeElement($investPicture)) {
+            if ($investPictures->getInvest() === $this) {
+                $investPictures->setInvest(null);
             }
         }
 

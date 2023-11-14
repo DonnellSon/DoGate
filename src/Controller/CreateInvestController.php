@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\Invest;
 use DateTimeImmutable;
 use App\Entity\Company;
 use App\Entity\CompanyLogo;
 use App\Entity\InvestPicture;
-use App\Entity\Investissement;
 use Doctrine\ORM\EntityManagerInterface;
 use ApiPlatform\Api\IriConverterInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,11 +23,11 @@ class CreateInvestController extends AbstractController
     {
     }
 
-    public function __invoke(Request $req): Investissement
+    public function __invoke(Request $req): Invest
     {
         // dd($req->files->get('investPictures'));
         $currentUser = $this->security->getUser();
-        $invest = new Investissement();
+        $invest = new Invest();
         $requestInvest = $req->request;
         $investAuthorIri=$requestInvest->get(key:'author');
         if($investAuthorIri){

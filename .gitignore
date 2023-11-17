@@ -6,6 +6,7 @@
 /public/bundles/
 /var/
 /vendor/
+/.gitignore/
 ###< symfony/framework-bundle ###
 
 ###> lexik/jwt-authentication-bundle ###

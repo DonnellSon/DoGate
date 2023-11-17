@@ -41,7 +41,7 @@ class PostUserSubscriber implements EventSubscriberInterface
                 || $event->getControllerResult() instanceof Comment
                 || $event->getControllerResult() instanceof CommentReply
                 || $event->getControllerResult() instanceof Company
-                || ($event->getControllerResult() instanceof Invest && !$event->getControllerResult()->getAuthor())
+                || ($event->getControllerResult() instanceof Invest && !$event->getControllerResult()->getAuthor() instanceof Company)
                 || $event->getControllerResult() instanceof Message
                 || ($event->getControllerResult() instanceof PostEvaluation))
             && ($method === 'POST')

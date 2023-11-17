@@ -55,6 +55,13 @@ class JobOffer
     #[Groups(['users_read','job_offers_read'])]
     private ?Author $author = null;
 
+    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    private ?JobGrade $grade = null;
+
+    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?JobType $type = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -158,6 +165,30 @@ class JobOffer
     public function setAuthor(?Author $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getGrade(): ?JobGrade
+    {
+        return $this->grade;
+    }
+
+    public function setGrade(?JobGrade $grade): static
+    {
+        $this->grade = $grade;
+
+        return $this;
+    }
+
+    public function getType(): ?JobType
+    {
+        return $this->type;
+    }
+
+    public function setType(?JobType $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

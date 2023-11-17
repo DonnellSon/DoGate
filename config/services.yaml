@@ -51,8 +51,11 @@ services:
         tags: ['controller.service_arguments']
     App\Controller\UserCustomController:
         tags: ['controller.service_arguments']
-    App\Resolver\QueryValueResolver:
-        tags: ['controller.argument_value_resolver']
+    App\Filter\CompanyTypeTitleFilter:
+        tags: ['api_platform.filter']
+    App\Filter\CompanySizeFilter:
+        tags: ['api_platform.filter']
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

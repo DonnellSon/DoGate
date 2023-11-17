@@ -2,21 +2,25 @@
 
 namespace App\Entity;
 
+use App\Entity\Company;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
+use App\Filter\CompanySizeFilter;
 use Symfony\Flex\Path as FlexPath;
 use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\InvestRepository;
-use App\Service\InvestSearchService;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filter\CompanySizeTitleFilter;
+use App\Filter\CompanyTypeTitleFilter;
 use Symfony\Component\Filesystem\Path;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\InvestGetController;
 use App\Filter\InvestCustomsSearchFilter;
 use App\Controller\CreateInvestController;
+use App\Controller\SearchInvestController;
 use Doctrine\Common\Collections\Collection;
 use App\Controller\GetInvestmentsController;
 use ApiPlatform\Metadata\Post as MetadataPost;
@@ -43,7 +47,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
-
+#[ApiFilter(CompanyTypeTitleFilter::class,properties:['companyTypeTitles'=>'exact'])]
+#[ApiFilter(CompanySizeFilter::class,properties:['companySizes'=>'exact'])]
 #[ApiFilter(SearchFilter::class, properties: ["title" => "exact", 
 "description" => "partial",
 "need" => "partial",
@@ -52,7 +57,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 "author.pays" => "partial",
 "author.companytypes.type" => "exact",
 "collected" => "partial"])]
-
 class Invest
 {
     #[ORM\Id]
@@ -92,9 +96,9 @@ class Invest
     #[Groups(['company_read', 'invest_read'])]
     private Collection $domains;
 
-    #[ORM\ManyToOne(targetEntity:Author::class)]
+    #[ORM\ManyToOne(targetEntity: Author::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['posts_read','image_read', 'invest_read'])]
+    #[Groups(['posts_read', 'image_read', 'invest_read'])]
     private ?Author $author = null;
 
     #[ORM\OneToMany(mappedBy: 'invest', targetEntity: InvestPicture::class)]
@@ -107,11 +111,6 @@ class Invest
         $this->domains = new ArrayCollection();
         $this->investPictures = new ArrayCollection();
     }
-
-    // public function searchInvest(InvestSearchService $investSearchService, $query)
-    // {
-    //     return $investSearchService->search($query);
-    // }
 
     public function getId(): ?string
     {
@@ -235,5 +234,5 @@ class Invest
         return $this;
     }
 
-   
+
 }

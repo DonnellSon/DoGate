@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobOfferRepository;
-use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: JobOfferRepository::class)]
@@ -13,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['job_offers_read']
     ],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 class JobOffer
 {
     #[ORM\Id]

@@ -118,6 +118,14 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $discordId = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recommended::class)]
+    #[Groups(['users_read', 'posts_read'])]
+    private Collection $recommended;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(['users_read', 'posts_read'])]
+    private ?About $about = null;
+
     public function getId(): ?string
     {
         return parent::getId();
@@ -126,6 +134,7 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     public function __construct()
     {
         $this->profilePictures = new ArrayCollection();
+        $this->recommended = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -353,6 +362,48 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     public function setDiscordId(?string $discordId): static
     {
         $this->discordId = $discordId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recommended>
+     */
+    public function getRecommended(): Collection
+    {
+        return $this->recommended;
+    }
+
+    public function addRecommended(Recommended $recommended): static
+    {
+        if (!$this->recommended->contains($recommended)) {
+            $this->recommended->add($recommended);
+            $recommended->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecommended(Recommended $recommended): static
+    {
+        if ($this->recommended->removeElement($recommended)) {
+            // set the owning side to null (unless already changed)
+            if ($recommended->getUser() === $this) {
+                $recommended->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAbout(): ?About
+    {
+        return $this->about;
+    }
+
+    public function setAbout(?About $about): static
+    {
+        $this->about = $about;
 
         return $this;
     }

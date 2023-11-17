@@ -28,7 +28,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiFilter(SearchFilter::class, properties: ['name'=>'ipartial','companyType.type' => 'exact', 'domain' => 'iexacte', 'companySize.size' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact',
+'name' => 'exact',
+'adress' => 'exact',
+'pays' =>'exact',
+'nifStat' => 'exact',
+'description' => 'partial',
+'numero' => 'exact',
+'email' => 'exact',
+'website' => 'exact',
+'domains.title' => 'exact',
+'companySize.Size' => 'exact',
+
+])]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['company_read']
@@ -142,6 +154,10 @@ class Company extends Author
     #[Groups(['company_read', 'invest_read'])]
     private ?CompanyType $companyType = null;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Turnover::class)]
+    #[Groups(['company_read', 'invest_read'])]
+    private Collection $turnover;
+
     #[ORM\Column(length: 255)]
     #[Groups(['company_read', 'invest_read'])]
     private ?string $portalId = null;
@@ -157,6 +173,7 @@ class Company extends Author
     {
         $this->domains = new ArrayCollection();
         $this->companyLogo = new ArrayCollection();
+        $this->turnover = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -409,6 +426,36 @@ $this->setPortalId(random_int(10000000000000, 99999999999999));
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection<int, Turnover>
+     */
+    public function getTurnover(): Collection
+    {
+        return $this->turnover;
+    }
+
+    public function addTurnover(Turnover $turnover): static
+    {
+        if (!$this->turnover->contains($turnover)) {
+            $this->turnover->add($turnover);
+            $turnover->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTurnover(Turnover $turnover): static
+    {
+        if ($this->turnover->removeElement($turnover)) {
+            // set the owning side to null (unless already changed)
+            if ($turnover->getCompany() === $this) {
+                $turnover->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getPortalId(): ?string
     {

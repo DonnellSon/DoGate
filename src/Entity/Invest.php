@@ -39,9 +39,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        // new Get(
-        //     controller: GetInvestmentsController::class,
-        // ),
         new Put(),
         new Patch(),
         new MetadataPost(
@@ -52,6 +49,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(CompanyTypeTitleFilter::class,properties:['companyTypeTitles'=>'exact'])]
 #[ApiFilter(CompanySizeFilter::class,properties:['companySizes'=>'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ["title" => "exact", 
+"description" => "partial",
+"need" => "partial",
+"domaine.title" => "partial",
+"author.companies.name" => "exact",
+"author.pays" => "partial",
+"author.companytypes.type" => "exact",
+"collected" => "partial"])]
 class Invest
 {
     #[ORM\Id]

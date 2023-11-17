@@ -2,15 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Repository\LocalisationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\PaysGeographyRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: LocalisationRepository::class)]
-#[ApiResource()]
-class Localisation
+#[ORM\Entity(repositoryClass: PaysGeographyRepository::class)]
+#[ApiResource(
+    normalizationContext:
+    ['groups'=>['pays_read']]
+)]
+class PaysGeography
 {
     #[ORM\Id]
     #[ORM\Column(type: "string", unique: true)]
@@ -18,10 +23,11 @@ class Localisation
     #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
     private ?string $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $latLong = null;
+    #[Column(type: 'json')]
+    #[Groups(['pays_read'])]
+    private array $extraData = [];
 
-    #[ORM\OneToMany(mappedBy: 'localisation', targetEntity: Pays::class)]
+    #[ORM\OneToMany(mappedBy: 'paysGeography', targetEntity: Pays::class)]
     private Collection $pays;
 
     public function __construct()
@@ -32,18 +38,6 @@ class Localisation
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function getLatLong(): ?string
-    {
-        return $this->latLong;
-    }
-
-    public function setLatLong(string $latLong): static
-    {
-        $this->latLong = $latLong;
-
-        return $this;
     }
 
     /**
@@ -58,7 +52,7 @@ class Localisation
     {
         if (!$this->pays->contains($pay)) {
             $this->pays->add($pay);
-            $pay->setLocalisation($this);
+            $pay->setPaysGeography($this);
         }
 
         return $this;
@@ -68,10 +62,22 @@ class Localisation
     {
         if ($this->pays->removeElement($pay)) {
             // set the owning side to null (unless already changed)
-            if ($pay->getLocalisation() === $this) {
-                $pay->setLocalisation(null);
+            if ($pay->getPaysGeography() === $this) {
+                $pay->setPaysGeography(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getExtraData(): array
+    {
+        return $this->extraData;
+    }
+
+    public function setExtraData($extraData): self
+    {
+        $this->extraData = $extraData;
 
         return $this;
     }

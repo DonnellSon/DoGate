@@ -23,6 +23,7 @@ use App\Controller\PostThumbUploadController;
 use ApiPlatform\Metadata\Post as MetadataPost;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -60,6 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['content' => 'exact'])]
 class Post extends CommentableEntity
 {
 

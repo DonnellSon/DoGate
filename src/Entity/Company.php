@@ -27,7 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact', 'domain' => 'iexacte', 'companySize.size' => 'exact'])]
+#[ORM\HasLifecycleCallbacks]
+#[ApiFilter(SearchFilter::class, properties: ['name'=>'ipartial','companyType.type' => 'exact', 'domain' => 'iexacte', 'companySize.size' => 'exact'])]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['company_read']
@@ -141,6 +142,10 @@ class Company extends Author
     #[Groups(['company_read', 'invest_read'])]
     private ?CompanyType $companyType = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['company_read', 'invest_read'])]
+    private ?string $portalId = null;
+
     // #[ORM\ManyToMany(targetEntity:Evaluation::class)]
     // #[ORM\JoinTable(name:"company_evaluation")]
     // #[ORM\JoinColumn(name:"company_id", referencedColumnName:"id")]
@@ -152,6 +157,14 @@ class Company extends Author
     {
         $this->domains = new ArrayCollection();
         $this->companyLogo = new ArrayCollection();
+    }
+
+    #[ORM\PreFlush]
+    public function generatePortalId(): ?string
+    {
+
+$this->setPortalId(random_int(10000000000000, 99999999999999));
+        return null;
     }
 
     public function getName(): ?string
@@ -396,6 +409,18 @@ class Company extends Author
 
     //     return $this;
     // }
+
+    public function getPortalId(): ?string
+    {
+        return $this->portalId;
+    }
+
+    public function setPortalId(string $portalId): static
+    {
+        $this->portalId = $portalId;
+
+        return $this;
+    }
 }
 
 

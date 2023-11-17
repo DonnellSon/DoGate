@@ -2,22 +2,27 @@
 
 namespace App\Entity;
 
+use App\Entity\Company;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
+use App\Filter\CompanySizeFilter;
 use Symfony\Flex\Path as FlexPath;
 use ApiPlatform\Metadata\ApiFilter;
+use App\Repository\InvestRepository;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filter\CompanySizeTitleFilter;
+use App\Filter\CompanyTypeTitleFilter;
 use Symfony\Component\Filesystem\Path;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\InvestGetController;
 use App\Filter\InvestCustomsSearchFilter;
 use App\Controller\CreateInvestController;
+use App\Controller\SearchInvestController;
 use Doctrine\Common\Collections\Collection;
 use App\Controller\GetInvestmentsController;
-use App\Repository\InvestRepository;
 use ApiPlatform\Metadata\Post as MetadataPost;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,8 +50,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
-
-
+#[ApiFilter(CompanyTypeTitleFilter::class,properties:['companyTypeTitles'=>'exact'])]
+#[ApiFilter(CompanySizeFilter::class,properties:['companySizes'=>'exact'])]
 class Invest
 {
     #[ORM\Id]
@@ -86,9 +91,9 @@ class Invest
     #[Groups(['company_read', 'invest_read'])]
     private Collection $domains;
 
-    #[ORM\ManyToOne(targetEntity:Author::class)]
+    #[ORM\ManyToOne(targetEntity: Author::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['posts_read','image_read', 'invest_read'])]
+    #[Groups(['posts_read', 'image_read', 'invest_read'])]
     private ?Author $author = null;
 
     #[ORM\OneToMany(mappedBy: 'invest', targetEntity: InvestPicture::class)]
@@ -224,5 +229,5 @@ class Invest
         return $this;
     }
 
-   
+
 }

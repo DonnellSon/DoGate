@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231114092444 extends AbstractMigration
+final class Version20231114122106 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,14 +24,14 @@ final class Version20231114092444 extends AbstractMigration
         $this->addSql('CREATE TABLE comment (id VARCHAR(255) NOT NULL, author_id VARCHAR(255) NOT NULL, commentable_id VARCHAR(255) DEFAULT NULL, parent_id VARCHAR(255) DEFAULT NULL, content VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', updated_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_9474526CF675F31B (author_id), INDEX IDX_9474526CF8B08B0 (commentable_id), INDEX IDX_9474526C727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE commentable_entity (id VARCHAR(255) NOT NULL, commentable_type VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE company (id VARCHAR(255) NOT NULL, active_logo_id VARCHAR(255) DEFAULT NULL, author_id VARCHAR(255) NOT NULL, company_size_id VARCHAR(255) NOT NULL, company_type_id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, adress VARCHAR(255) NOT NULL, pays VARCHAR(255) NOT NULL, nif_stat VARCHAR(255) NOT NULL, creation_date DATETIME NOT NULL, description LONGTEXT NOT NULL, numero VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, web_site VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_4FBF094F7AC3A854 (active_logo_id), INDEX IDX_4FBF094FF675F31B (author_id), INDEX IDX_4FBF094F69DFB2F0 (company_size_id), INDEX IDX_4FBF094FE51E9644 (company_type_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE company_domaine (company_id VARCHAR(255) NOT NULL, domaine_id VARCHAR(255) NOT NULL, INDEX IDX_58FD101B979B1AD6 (company_id), INDEX IDX_58FD101B4272FC9F (domaine_id), PRIMARY KEY(company_id, domaine_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE company_domain (company_id VARCHAR(255) NOT NULL, domain_id VARCHAR(255) NOT NULL, INDEX IDX_9A367A7E979B1AD6 (company_id), INDEX IDX_9A367A7E115F0EE5 (domain_id), PRIMARY KEY(company_id, domain_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE company_logo (id VARCHAR(255) NOT NULL, company_id VARCHAR(255) DEFAULT NULL, file_url VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', updated_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', active TINYINT(1) NOT NULL, file_name VARCHAR(255) NOT NULL, file_size VARCHAR(255) NOT NULL, INDEX IDX_A7E380FD979B1AD6 (company_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE company_size (id VARCHAR(255) NOT NULL, size VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE company_type (id VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE contact (id INT AUTO_INCREMENT NOT NULL, requester_id VARCHAR(255) NOT NULL, receiver_id VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, INDEX IDX_4C62E638ED442CF4 (requester_id), INDEX IDX_4C62E638CD53EDB6 (receiver_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE discussion (id VARCHAR(255) NOT NULL, discu_name VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE domaine (id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE domaine_invest (domaine_id VARCHAR(255) NOT NULL, invest_id VARCHAR(255) NOT NULL, INDEX IDX_E4E0EEA84272FC9F (domaine_id), INDEX IDX_E4E0EEA8C7065BD6 (invest_id), PRIMARY KEY(domaine_id, invest_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE domain (id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE domain_invest (domain_id VARCHAR(255) NOT NULL, invest_id VARCHAR(255) NOT NULL, INDEX IDX_846A534F115F0EE5 (domain_id), INDEX IDX_846A534FC7065BD6 (invest_id), PRIMARY KEY(domain_id, invest_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE evaluation (id INT AUTO_INCREMENT NOT NULL, author_id VARCHAR(255) NOT NULL, note INT NOT NULL, evaluation_type VARCHAR(255) NOT NULL, INDEX IDX_1323A575F675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE gender (id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE image (id VARCHAR(255) NOT NULL, image_entity_id VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_C53D045F59A7A609 (image_entity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -59,13 +59,13 @@ final class Version20231114092444 extends AbstractMigration
         $this->addSql('ALTER TABLE company ADD CONSTRAINT FK_4FBF094F69DFB2F0 FOREIGN KEY (company_size_id) REFERENCES company_size (id)');
         $this->addSql('ALTER TABLE company ADD CONSTRAINT FK_4FBF094FE51E9644 FOREIGN KEY (company_type_id) REFERENCES company_type (id)');
         $this->addSql('ALTER TABLE company ADD CONSTRAINT FK_4FBF094FBF396750 FOREIGN KEY (id) REFERENCES author (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE company_domaine ADD CONSTRAINT FK_58FD101B979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE company_domaine ADD CONSTRAINT FK_58FD101B4272FC9F FOREIGN KEY (domaine_id) REFERENCES domaine (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE company_domain ADD CONSTRAINT FK_9A367A7E979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE company_domain ADD CONSTRAINT FK_9A367A7E115F0EE5 FOREIGN KEY (domain_id) REFERENCES domain (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE company_logo ADD CONSTRAINT FK_A7E380FD979B1AD6 FOREIGN KEY (company_id) REFERENCES company (id)');
         $this->addSql('ALTER TABLE contact ADD CONSTRAINT FK_4C62E638ED442CF4 FOREIGN KEY (requester_id) REFERENCES author (id)');
         $this->addSql('ALTER TABLE contact ADD CONSTRAINT FK_4C62E638CD53EDB6 FOREIGN KEY (receiver_id) REFERENCES author (id)');
-        $this->addSql('ALTER TABLE domaine_invest ADD CONSTRAINT FK_E4E0EEA84272FC9F FOREIGN KEY (domaine_id) REFERENCES domaine (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE domaine_invest ADD CONSTRAINT FK_E4E0EEA8C7065BD6 FOREIGN KEY (invest_id) REFERENCES invest (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE domain_invest ADD CONSTRAINT FK_846A534F115F0EE5 FOREIGN KEY (domain_id) REFERENCES domain (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE domain_invest ADD CONSTRAINT FK_846A534FC7065BD6 FOREIGN KEY (invest_id) REFERENCES invest (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE evaluation ADD CONSTRAINT FK_1323A575F675F31B FOREIGN KEY (author_id) REFERENCES author (id)');
         $this->addSql('ALTER TABLE image ADD CONSTRAINT FK_C53D045F59A7A609 FOREIGN KEY (image_entity_id) REFERENCES image_entity (id)');
         $this->addSql('ALTER TABLE image ADD CONSTRAINT FK_C53D045FBF396750 FOREIGN KEY (id) REFERENCES commentable_entity (id) ON DELETE CASCADE');
@@ -100,13 +100,13 @@ final class Version20231114092444 extends AbstractMigration
         $this->addSql('ALTER TABLE company DROP FOREIGN KEY FK_4FBF094F69DFB2F0');
         $this->addSql('ALTER TABLE company DROP FOREIGN KEY FK_4FBF094FE51E9644');
         $this->addSql('ALTER TABLE company DROP FOREIGN KEY FK_4FBF094FBF396750');
-        $this->addSql('ALTER TABLE company_domaine DROP FOREIGN KEY FK_58FD101B979B1AD6');
-        $this->addSql('ALTER TABLE company_domaine DROP FOREIGN KEY FK_58FD101B4272FC9F');
+        $this->addSql('ALTER TABLE company_domain DROP FOREIGN KEY FK_9A367A7E979B1AD6');
+        $this->addSql('ALTER TABLE company_domain DROP FOREIGN KEY FK_9A367A7E115F0EE5');
         $this->addSql('ALTER TABLE company_logo DROP FOREIGN KEY FK_A7E380FD979B1AD6');
         $this->addSql('ALTER TABLE contact DROP FOREIGN KEY FK_4C62E638ED442CF4');
         $this->addSql('ALTER TABLE contact DROP FOREIGN KEY FK_4C62E638CD53EDB6');
-        $this->addSql('ALTER TABLE domaine_invest DROP FOREIGN KEY FK_E4E0EEA84272FC9F');
-        $this->addSql('ALTER TABLE domaine_invest DROP FOREIGN KEY FK_E4E0EEA8C7065BD6');
+        $this->addSql('ALTER TABLE domain_invest DROP FOREIGN KEY FK_846A534F115F0EE5');
+        $this->addSql('ALTER TABLE domain_invest DROP FOREIGN KEY FK_846A534FC7065BD6');
         $this->addSql('ALTER TABLE evaluation DROP FOREIGN KEY FK_1323A575F675F31B');
         $this->addSql('ALTER TABLE image DROP FOREIGN KEY FK_C53D045F59A7A609');
         $this->addSql('ALTER TABLE image DROP FOREIGN KEY FK_C53D045FBF396750');
@@ -132,14 +132,14 @@ final class Version20231114092444 extends AbstractMigration
         $this->addSql('DROP TABLE comment');
         $this->addSql('DROP TABLE commentable_entity');
         $this->addSql('DROP TABLE company');
-        $this->addSql('DROP TABLE company_domaine');
+        $this->addSql('DROP TABLE company_domain');
         $this->addSql('DROP TABLE company_logo');
         $this->addSql('DROP TABLE company_size');
         $this->addSql('DROP TABLE company_type');
         $this->addSql('DROP TABLE contact');
         $this->addSql('DROP TABLE discussion');
-        $this->addSql('DROP TABLE domaine');
-        $this->addSql('DROP TABLE domaine_invest');
+        $this->addSql('DROP TABLE domain');
+        $this->addSql('DROP TABLE domain_invest');
         $this->addSql('DROP TABLE evaluation');
         $this->addSql('DROP TABLE gender');
         $this->addSql('DROP TABLE image');

@@ -74,6 +74,9 @@ abstract class Author
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Evaluation::class, orphanRemoval: true)]
     private Collection $evaluations;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Recommended::class)]
+    private Collection $recommendeds;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -84,6 +87,7 @@ abstract class Author
         $this->receivedRequests = new ArrayCollection();
         $this->jobOffers = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
+        $this->recommendeds = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -345,6 +349,36 @@ abstract class Author
             // set the owning side to null (unless already changed)
             if ($evaluation->getAuthor() === $this) {
                 $evaluation->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recommended>
+     */
+    public function getRecommendeds(): Collection
+    {
+        return $this->recommendeds;
+    }
+
+    public function addRecommended(Recommended $recommended): static
+    {
+        if (!$this->recommendeds->contains($recommended)) {
+            $this->recommendeds->add($recommended);
+            $recommended->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecommended(Recommended $recommended): static
+    {
+        if ($this->recommendeds->removeElement($recommended)) {
+            // set the owning side to null (unless already changed)
+            if ($recommended->getAuthor() === $this) {
+                $recommended->setAuthor(null);
             }
         }
 

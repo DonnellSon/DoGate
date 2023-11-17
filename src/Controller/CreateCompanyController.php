@@ -5,9 +5,12 @@ namespace App\Controller;
 use DateTimeImmutable;
 use App\Entity\Company;
 use App\Entity\CompanyLogo;
+use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use ApiPlatform\Api\IriConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -55,4 +58,5 @@ class CreateCompanyController extends AbstractController
         }
         return $company;
     }
+
 }

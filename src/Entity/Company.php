@@ -27,7 +27,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact', 'domain' => 'iexacte', 'companySize.size' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact',
+'name' => 'exact',
+'adress' => 'exact',
+'pays' =>'exact',
+'nifStat' => 'exact',
+'description' => 'partial',
+'numero' => 'exact',
+'email' => 'exact',
+'website' => 'exact',
+'domains.title' => 'exact',
+'companySize.Size' => 'exact',
+
+])]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['company_read']
@@ -141,6 +153,10 @@ class Company extends Author
     #[Groups(['company_read', 'invest_read'])]
     private ?CompanyType $companyType = null;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Turnover::class)]
+    #[Groups(['company_read', 'invest_read'])]
+    private Collection $turnover;
+
     // #[ORM\ManyToMany(targetEntity:Evaluation::class)]
     // #[ORM\JoinTable(name:"company_evaluation")]
     // #[ORM\JoinColumn(name:"company_id", referencedColumnName:"id")]
@@ -152,6 +168,7 @@ class Company extends Author
     {
         $this->domains = new ArrayCollection();
         $this->companyLogo = new ArrayCollection();
+        $this->turnover = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -396,6 +413,36 @@ class Company extends Author
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection<int, Turnover>
+     */
+    public function getTurnover(): Collection
+    {
+        return $this->turnover;
+    }
+
+    public function addTurnover(Turnover $turnover): static
+    {
+        if (!$this->turnover->contains($turnover)) {
+            $this->turnover->add($turnover);
+            $turnover->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTurnover(Turnover $turnover): static
+    {
+        if ($this->turnover->removeElement($turnover)) {
+            // set the owning side to null (unless already changed)
+            if ($turnover->getCompany() === $this) {
+                $turnover->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
 }
 
 

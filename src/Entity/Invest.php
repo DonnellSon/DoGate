@@ -9,6 +9,8 @@ use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Flex\Path as FlexPath;
 use ApiPlatform\Metadata\ApiFilter;
+use App\Repository\InvestRepository;
+use App\Service\InvestSearchService;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Filesystem\Path;
 use ApiPlatform\Metadata\GetCollection;
@@ -17,7 +19,6 @@ use App\Filter\InvestCustomsSearchFilter;
 use App\Controller\CreateInvestController;
 use Doctrine\Common\Collections\Collection;
 use App\Controller\GetInvestmentsController;
-use App\Repository\InvestRepository;
 use ApiPlatform\Metadata\Post as MetadataPost;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,9 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        // new Get(
-        //     controller: GetInvestmentsController::class,
-        // ),
         new Put(),
         new Patch(),
         new MetadataPost(
@@ -46,6 +44,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 
+#[ApiFilter(SearchFilter::class, properties: ["title" => "exact", 
+"description" => "partial",
+"need" => "partial",
+"domaine.title" => "partial",
+"author.companies.name" => "exact",
+"author.pays" => "partial",
+"author.companytypes.type" => "exact",
+"collected" => "partial"])]
 
 class Invest
 {
@@ -101,6 +107,11 @@ class Invest
         $this->domains = new ArrayCollection();
         $this->investPictures = new ArrayCollection();
     }
+
+    // public function searchInvest(InvestSearchService $investSearchService, $query)
+    // {
+    //     return $investSearchService->search($query);
+    // }
 
     public function getId(): ?string
     {

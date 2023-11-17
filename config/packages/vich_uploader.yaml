@@ -27,4 +27,15 @@ vich_uploader:
             namer: App\Namer\PostThumbnailNamer
             delete_on_update: true
             delete_on_remove: true
-        
+        seal_upload:
+            uri_prefix: /upload/img/seal
+            upload_destination: '%kernel.project_dir%/public/upload/img/seal'
+            namer: App\Namer\PostThumbnailNamer
+            delete_on_update: true
+            delete_on_remove: true
+        flag_upload:
+            uri_prefix: /upload/img/flag
+            upload_destination: '%kernel.project_dir%/public/upload/img/flag'
+            namer: App\Namer\PostThumbnailNamer
+            delete_on_update: true
+            delete_on_remove: true

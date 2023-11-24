@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Invest;
 use App\Entity\Company;
 use App\Entity\Contact;
+use App\Entity\Request;
 use ApiPlatform\Metadata\Get;
 use App\Config\ContactStatus;
 use Doctrine\ORM\Mapping as ORM;
@@ -68,6 +69,12 @@ abstract class Author
     #[ORM\OneToMany(targetEntity:Contact::class, mappedBy:"receiver")]
     private $receivedRequests;
 
+    #[ORM\OneToMany(targetEntity:RequestE::class, mappedBy:"requester")]
+    private $sentRequestsE;
+
+    #[ORM\OneToMany(targetEntity:RequestE::class, mappedBy:"receiver")]
+    private $receivedRequestsE;
+
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: JobOffer::class)]
     private Collection $jobOffers;
 
@@ -85,6 +92,8 @@ abstract class Author
         $this->invests = new ArrayCollection();
         $this->sentRequests = new ArrayCollection();
         $this->receivedRequests = new ArrayCollection();
+        $this->sentRequestsE = new ArrayCollection();
+        $this->receivedRequestsE = new ArrayCollection();
         $this->jobOffers = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
         $this->recommendeds = new ArrayCollection();
@@ -267,6 +276,64 @@ abstract class Author
             // set the owning side to null (unless already changed)
             if ($contact->getReceiver() === $this) {
                 $contact->setReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**---------------------------------Request----------------------------- **/
+
+    public function getSentRequestsE(): Collection
+    {
+        return $this->sentRequestsE;
+    }
+
+    public function addSentRequestE(RequestE $request): self
+    {
+        if (!$this->sentRequestsE->contains($request)) {
+            $this->sentRequestsE[] = $request;
+            $request->setRequester($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSentRequestE(RequestE $request): self
+    {
+        if ($this->sentRequestsE->contains($request)) {
+            $this->sentRequestsE->removeElement($request);
+            // set the owning side to null (unless already changed)
+            if ($request->getRequester() === $this) {
+                $request->setRequester(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getReceivedRequestsE(): Collection
+    {
+        return $this->receivedRequestsE;
+    }
+
+    public function addReceivedRequestE(RequestE $request): self
+    {
+        if (!$this->receivedRequestsE->contains($request)) {
+            $this->receivedRequestsE[] = $request;
+            $request->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceivedRequestE(requestE $request): self
+    {
+        if ($this->receivedRequestsE->contains($request)) {
+            $this->receivedRequestsE->removeElement($request);
+            // set the owning side to null (unless already changed)
+            if ($request->getReceiver() === $this) {
+                $request->setReceiver(null);
             }
         }
 

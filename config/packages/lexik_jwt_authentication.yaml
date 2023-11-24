@@ -15,4 +15,4 @@ lexik_jwt_authentication:
         BEARER:
             samesite: none
             httpOnly: false
-            domain: localhost
+            domain: '%env(SITE_DOMAIN)%'

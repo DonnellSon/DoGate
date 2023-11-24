@@ -37,11 +37,11 @@ class PostUserSubscriber implements EventSubscriberInterface
 
         $currentUser = $this->security->getUser();
         $method = $event->getRequest()->getMethod();
-        if (($event->getControllerResult() instanceof Post
+        if ((($event->getControllerResult() instanceof Post && !($event->getControllerResult()->getAuthor() instanceof Company))
                 || $event->getControllerResult() instanceof Comment
                 || $event->getControllerResult() instanceof CommentReply
                 || $event->getControllerResult() instanceof Company
-                || ($event->getControllerResult() instanceof Invest && !$event->getControllerResult()->getAuthor() instanceof Company)
+                || ($event->getControllerResult() instanceof Invest && !($event->getControllerResult()->getAuthor() instanceof Company))
                 || $event->getControllerResult() instanceof Message
                 || ($event->getControllerResult() instanceof PostEvaluation))
             && ($method === 'POST')

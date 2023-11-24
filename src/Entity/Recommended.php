@@ -12,22 +12,6 @@ use App\Repository\RecommendedRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RecommendedRepository::class)]
-#[ApiResource(
-    normalizationContext: [
-        'groups' => ['users_read', 'comment_read']
-    ],
-    order:["createdAt"=>"DESC"],
-    uriTemplate: '/commentable_entities/{id}/comments', 
-    uriVariables: [
-        'id' => new Link(
-            fromClass: CommentableEntity::class,
-            fromProperty: 'comments'
-        )
-    ], 
-    operations: [
-        new GetCollection(),
-    ]
-)]
 class Recommended
 {
     #[ORM\Id]

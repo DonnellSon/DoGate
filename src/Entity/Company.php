@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['companyType.type' => 'exact',
 'name' => 'exact',
 'adress' => 'exact',
-'pays' =>'exact',
+'pays.name' =>'exact',
 'nifStat' => 'exact',
 'description' => 'partial',
 'numero' => 'exact',
@@ -70,6 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [new GetCollection()]
 )]
 
+
 class Company extends Author
 {
 
@@ -77,7 +78,7 @@ class Company extends Author
     #[Assert\NotBlank([
         'message' => 'ce champ est obligatoire'
     ])]
-    #[Groups(['company_read', 'invest_read','job_offers_read'])]
+    #[Groups(['company_read', 'invest_read','job_offers_read', 'posts_read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -86,13 +87,6 @@ class Company extends Author
     ])]
     #[Groups(['company_read', 'invest_read','job_offers_read'])]
     private ?string $adress = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank([
-        'message' => 'ce champ est obligatoire'
-    ])]
-    #[Groups(['company_read', 'invest_read','job_offers_read'])]
-    private ?string $pays = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank([
@@ -128,7 +122,7 @@ class Company extends Author
     private ?string $webSite = null;
 
     #[ORM\ManyToMany(targetEntity: Domain::class, inversedBy: 'companies')]
-    #[Groups(['company_read', 'invest_read','job_offers_read'])]
+    #[Groups(['company_read', 'invest_read','job_offers_read', 'posts_read'])]
     private Collection $domains;
 
     #[ORM\OneToMany(mappedBy: 'Company', targetEntity: CompanyLogo::class, orphanRemoval: true)]
@@ -161,6 +155,11 @@ class Company extends Author
     #[ORM\Column(length: 255)]
     #[Groups(['company_read', 'invest_read'])]
     private ?string $portalId = null;
+
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['company_read', 'invest_read', 'posts_read'])]
+    private ?Pays $country = null;
 
     // #[ORM\ManyToMany(targetEntity:Evaluation::class)]
     // #[ORM\JoinTable(name:"company_evaluation")]
@@ -204,18 +203,6 @@ $this->setPortalId(random_int(10000000000000, 99999999999999));
     public function setAdress(string $adress): static
     {
         $this->adress = $adress;
-
-        return $this;
-    }
-
-    public function getPays(): ?string
-    {
-        return $this->pays;
-    }
-
-    public function setPays(string $pays): static
-    {
-        $this->pays = $pays;
 
         return $this;
     }
@@ -465,6 +452,18 @@ $this->setPortalId(random_int(10000000000000, 99999999999999));
     public function setPortalId(string $portalId): static
     {
         $this->portalId = $portalId;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Pays
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Pays $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }

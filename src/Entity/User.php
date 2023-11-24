@@ -28,18 +28,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
         'groups' => ['users_read']
     ],
 )]
-#[ApiResource(
-    normalizationContext: [
-        'groups' => ['users_read']
-    ],
-    operations: [
-        new Get(
-            uriTemplate: '/users/{id}/withActiveProfilePicture',
-            controller: UserCustomController::class,
-            deserialize: false
-        )
-    ]
-)]
 #[UniqueEntity('email', message: 'Cette adresse email est déjà utilisé')]
 class User extends Author implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -126,6 +114,10 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     #[Groups(['users_read', 'posts_read'])]
     private ?About $about = null;
 
+    #[ORM\ManyToMany(targetEntity: Domain::class, inversedBy: 'users')]
+    #[Groups(['users_read', 'posts_read'])]
+    private Collection $domains;
+
     public function getId(): ?string
     {
         return parent::getId();
@@ -135,6 +127,7 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     {
         $this->profilePictures = new ArrayCollection();
         $this->recommended = new ArrayCollection();
+        $this->domains = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -404,6 +397,30 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     public function setAbout(?About $about): static
     {
         $this->about = $about;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Domain>
+     */
+    public function getDomains(): Collection
+    {
+        return $this->domains;
+    }
+
+    public function addDomain(Domain $domain): static
+    {
+        if (!$this->domains->contains($domain)) {
+            $this->domains->add($domain);
+        }
+
+        return $this;
+    }
+
+    public function removeDomain(Domain $domain): static
+    {
+        $this->domains->removeElement($domain);
 
         return $this;
     }

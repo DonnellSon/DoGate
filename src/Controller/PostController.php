@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\FileResource;
-use App\Entity\Image;
 use App\Entity\Post;
+use App\Entity\Image;
 use App\Entity\Thumbnail;
+use App\Entity\FileResource;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use ApiPlatform\Api\IriConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Vich\UploaderBundle\Handler\UploadHandler;
+use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
@@ -20,7 +21,7 @@ class PostController extends AbstractController
     private $entityManager;
     private $uploadHandler;
 
-    public function __construct(EntityManagerInterface $entityManager, UploadHandler $uploadHandler)
+    public function __construct(EntityManagerInterface $entityManager, UploadHandler $uploadHandler,private IriConverterInterface $iriConverter)
     {
         $this->entityManager = $entityManager;
         $this->uploadHandler = $uploadHandler;
@@ -31,6 +32,10 @@ class PostController extends AbstractController
         $post = new Post();
         $requestPost = $req->request;
         $post->setContent($requestPost->get(key: 'content'));
+        if($authorIri=$requestPost->get(key: 'author')){
+        $post->setAuthor($this->iriConverter->getResourceFromIri($authorIri));
+
+        }
         $uploadedFiles = $req->files->get('file');
         if ($uploadedFiles) {
             $i=0;

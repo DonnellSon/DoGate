@@ -21,11 +21,10 @@ class CompanySizeFilter extends AbstractFilter
         if (!is_array($value)) {
             throw new \InvalidArgumentException('Expected an array');
         }
-
         $alias = $queryBuilder->getRootAliases()[0];
         $queryBuilder->leftJoin(sprintf('%s.author', $alias),'a1');
         $queryBuilder->leftJoin(sprintf(Company::class, $alias),'c1','WITH','a1.id=c1.id');
-        $queryBuilder->leftJoin(sprintf('c.companySize', $alias),'cs1');
+        $queryBuilder->leftJoin(sprintf('c1.companySize', $alias),'cs1');
         $queryBuilder->andWhere(sprintf('cs1.id IN (:companySizes)', $alias));
         $queryBuilder->setParameter('companySizes', $value);
     }

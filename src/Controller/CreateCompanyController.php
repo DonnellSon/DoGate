@@ -31,14 +31,13 @@ class CreateCompanyController extends AbstractController
 
         $company->setName($requestPost->get(key: 'name'));
         $company->setAdress($requestPost->get(key: 'adress'));
-        $company->setPays($requestPost->get(key: 'pays'));
+        $company->setCountry($this->iriConverter->getResourceFromIri($requestPost->get(key:'country')));
         $company->setCreationDate(new DateTimeImmutable());
         $company->setDescription($requestPost->get(key: 'description'));
         $company->setNumero($requestPost->get(key: 'numero'));
         $company->setEmail($requestPost->get(key: 'email'));
         $company->setWebSite($requestPost->get(key: 'webSite'));
         $company->setNifStat($requestPost->get(key: 'nifStat'));
-        $company->setPays($requestPost->get(key: 'pays'));
         $company->setCompanySize($this->iriConverter->getResourceFromIri($requestPost->get(key: 'companySize')));
         $company->setCompanyType($this->iriConverter->getResourceFromIri($requestPost->get(key: 'companyType')));
 

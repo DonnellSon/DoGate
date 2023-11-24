@@ -48,7 +48,7 @@ class CreateInvestController extends AbstractController
             }
         }
 
-        if ($uploadedInvestPictures = $req->files->get('investPictures')) {
+        if ($uploadedInvestPictures = $req->files->get('medias')) {
             $i=0;
             foreach ($uploadedInvestPictures as $uploadedInvestPicture) {
                 $i=$i+500;

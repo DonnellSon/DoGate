@@ -2,18 +2,20 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\City;
 use App\Entity\Flag;
 use App\Entity\Pays;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Entity\CompanyType;
 use App\Entity\Domain;
 use App\Entity\Gender;
 use App\Entity\JobType;
 use App\Entity\JobGrade;
+use App\Entity\Language;
 use App\Entity\CompanySize;
+use App\Entity\CompanyType;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AppFixtures extends Fixture
 {
@@ -30,73 +32,303 @@ class AppFixtures extends Fixture
         $newDir = $this->kernel->getProjectDir() . '/public/upload/img/flags';
 
         $countries = [
-            'Algérie' => 'algeria.svg',
-            'Angola' => 'angola.svg',
-            'Bénin' => 'benin.svg',
-            'Botswana' => 'botswana.svg',
-            'Burkina Faso' => 'burkina_faso.svg',
-            'Burundi' => 'burundi.svg',
-            'Cameroun' => 'cameroon.svg',
-            'Cap-Vert' => 'cape_verde.svg',
-            'Chad' => 'chad.svg',
-            'Cueta' => 'cueta.svg',
-            'Comores' => 'comoros.svg',
-            'République du Congo' => 'republic_of_the_congo.svg',
-            'République démocratique du Congo' => 'democratic_Republic_of_the_congo.svg',
-            'Côte d\'Ivoire' => 'cote_d\'ivoire.svg',
-            'Djibouti' => 'djibouti.svg',
-            'Égypte' => 'egypt.svg',
-            'Gabon' => 'gabon.svg',
-            'Ghana' => 'ghana.svg',
-            'Guinée' => 'guinea.svg',
-            'Guinée-Bissau' => 'guinea-bissau.svg',
-            'Guinée équatoriale' => 'equatorial_guinea.svg',
-            'Kenya' => 'kenya.svg',
-            'Lesotho' => 'lesotho.svg',
-            'Liberia' => 'liberia.svg',
-            'Libye' => 'libya.svg',
-            'Madagascar' => 'madagascar.svg',
-            'Malawi' => 'malawi.svg',
-            'Mali' => 'mali.svg',
-            'Mauritanie' => 'mauritania.svg',
-            'Maurice' => 'mauritius.svg',
-            'Maroc' => 'morocco.svg',
-            'Mozambique' => 'mozambique.svg',
-            'Namibie' => 'namibia.svg',
-            'Niger' => 'niger.svg',
-            'Nigeria' => 'nigeria.svg',
-            'Ouganda' => 'uganda.svg',
-            'Rwanda' => 'rwanda.svg',
-            'Sao Tomé-et-Principe' => 'sao_tome_and_principe.svg',
-            'Sénégal' => 'senegal.svg',
-            'Seychelles' => 'seychelles.svg',
-            'Sierra Leone' => 'sierra_leone.svg',
-            'Somalie' => 'somalia.svg',
-            'Afrique du Sud' => 'south_africa.svg',
-            'Soudan' => 'sudan.svg',
-            'Soudan du Sud' => 'south_sudan.svg',
-            'Eswatini' => 'eswatini.svg',
-            'Tanzanie' => 'tanzania.svg',
-            'Togo' => 'togo.svg',
-            'Tunisie' => 'tunisia.svg',
-            'Zambie' => 'zambia.svg',
-            'Zimbabwe' => 'zimbabwe.svg',
-
-        ];
-
-        foreach ($countries as $name => $flagFilename) {
-            $pays = new Pays();
-            $pays->setName($name);
-
-            $flag = new Flag();
-            $newPath = $newDir . '/' . $flagFilename;
-            copy($imgDir . '/' . $flagFilename, $newPath);
-            $flagFile = new UploadedFile($newPath, $flagFilename, null, null, true);
-            $flag->setFile($flagFile);
-            $pays->setFlag($flag);
-
-            $manager->persist($pays);
-        }
+            'Algérie' => [
+                'flag' => 'algeria.svg',
+                'cities' => ['Alger', 'Oran', 'Constantine', 'Annaba'],
+                'languages' => ['Arabe', 'Berbère', 'Français']
+            ],
+            'Angola' => [
+                'flag' => 'angola.svg',
+                'cities' => ['Luanda', 'Lobito', 'Huambo', 'Benguela'],
+                'languages' => ['Portugais', 'Ovimbundu', 'Kimbundu']
+            ],
+            'Bénin' => [
+                'flag' => 'benin.svg',
+                'cities' => ['Cotonou', 'Porto-Novo', 'Parakou', 'Abomey-Calavi'],
+                'languages' => ['Français', 'Fon', 'Yoruba']
+            ],
+            'Botswana' => [
+                'flag' => 'botswana.svg',
+                'cities' => ['Gaborone', 'Francistown', 'Molepolole', 'Serowe'],
+                'languages' => ['Anglais', 'Tswana', 'Kalahari']
+            ],
+            'Burkina Faso' => [
+                'flag' => 'burkina_faso.svg',
+                'cities' => ['Ouagadougou', 'Bobo-Dioulasso', 'Koudougou', 'Ouahigouya'],
+                'languages' => ['Français', 'Mossi', 'Fulfulde']
+            ],
+            'Burundi' => [
+                'flag' => 'burundi.svg',
+                'cities' => ['Bujumbura', 'Gitega', 'Ngozi', 'Muyinga'],
+                'languages' => ['Kirundi', 'Français', 'Anglais']
+            ],
+            'Cameroun' => [
+                'flag' => 'cameroun.svg',
+                'cities' => ['Yaoundé', 'Douala', 'Bamenda', 'Bafoussam'],
+                'languages' => ['Français', 'Anglais', 'Pidgin']
+            ],
+            'Cap-Vert' => [
+                'flag' => 'cape_verde.svg',
+                'cities' => ['Praia', 'Mindelo', 'Assomada', 'Tarrafal'],
+                'languages' => ['Portugais', 'Capverdien', 'Crioulo']
+            ],
+            'Chad' => [
+                'flag' => 'chad.svg',
+                'cities' => ['N\'Djamena', 'Moundou', 'Sarh', 'Abéché'],
+                'languages' => ['Français', 'Arabe', 'Sara']
+            ],
+            'Cueta' => [
+                'flag' => 'cueta.svg',
+                'cities' => ['Ceuta Centro', 'El Príncipe Alfonso', 'Benzú', 'El Sarchal', 'Monte Hacho'],
+                'languages' => ['Espagnol']
+            ],
+            'Comores' => [
+                'flag' => 'comoros.svg',
+                'cities' => ['Moroni', 'Mutsamudu', 'Fomboni', 'Domoni', 'Mirontsi'],
+                'languages' => ['Comorien', 'Arabe', 'Français']
+            ],
+            'République du Congo' => [
+                'flag' => 'republic_of_the_congo.svg',
+                'cities' => ['Brazzaville', 'Pointe-Noire', 'Dolisie', 'Nkayi', 'Owando', 'Impfondo', 'Sibiti', 'Kinkala'],
+                'languages' => ['Français', 'Lingala', 'Kikongo']
+            ],
+            'République démocratique du Congo' => [
+                'flag' => 'democratic_Republic_of_the_congo.svg',
+                'cities' => ['Kinshasa', 'Lubumbashi', 'Mbuji-Mayi', 'Kisangani', 'Goma', 'Bukavu', 'Kananga', 'Matadi', 'Kisangani', 'Bunia'],
+                'languages' => ['Français', 'Lingala', 'Swahili', 'Tshiluba']
+            ],
+            'Côte d\'Ivoire' => [
+                'flag' => 'cote_d\'ivoire.svg',
+                'cities' => ['Abidjan', 'Yamoussoukro', 'Bouaké', 'Daloa', 'San Pedro', 'Korhogo', 'Man', 'Séguéla', 'Divo', 'Gagnoa'],
+                'languages' => ['Français', 'Baoulé', 'Bété', 'Sénoufo']
+            ],
+            'Djibouti' => [
+                'flag' => 'djibouti.svg',
+                'cities' => ['Djibouti', 'Ali Sabieh', 'Tadjourah', 'Obock', 'Dikhil'],
+                'languages' => ['Français', 'Arabe', 'Afar']
+            ],
+            'Égypte' => [
+                'flag' => 'egypt.svg',
+                'cities' => ['Le Caire', 'Alexandrie', 'Gizeh', 'Louxor', 'Assouan', 'Port-Saïd', 'Suez', 'Ismaïlia'],
+                'languages' => ['Arabe', 'Anglais']
+            ],
+            'Gabon' => [
+                'flag' => 'gabon.svg',
+                'cities' => ['Libreville', 'Port-Gentil', 'Franceville', 'Oyem', 'Moanda', 'Mouila', 'Tchibanga', 'Koulamoutou'],
+                'languages' => ['Français', 'Fang', 'Mbéré']
+            ],
+            'Ghana' => [
+                'flag' => 'ghana.svg',
+                'cities' => ['Accra', 'Kumasi', 'Tamale', 'Sekondi-Takoradi', 'Cape Coast', 'Sunyani', 'Tema', 'Bolgatanga'],
+                'languages' => ['Anglais', 'Akan', 'Mole-Dagbon']
+            ],
+            'Guinée' => [
+                'flag' => 'guinea.svg',
+                'cities' => ['Conakry', 'Nzérékoré', 'Kankan', 'Kindia', 'Labé', 'Mamou', 'Kamsar', 'Boke'],
+                'languages' => ['Français', 'Poular', 'Malinké']
+            ],
+            'Guinée-Bissau' => [
+                'flag' => 'guinea-bissau.svg',
+                'cities' => ['Bissau', 'Bafatá', 'Gabú', 'Canchungo'],
+                'languages' => ['Portugais', 'Crioulo']
+            ],
+            'Guinée équatoriale' => [
+                'flag' => 'equatorial_guinea.svg',
+                'cities' => ['Malabo', 'Bata', 'Ebebiyin', 'Mongomo'],
+                'languages' => ['Espagnol', 'Français']
+            ],
+            'Kenya' => [
+                'flag' => 'kenya.svg',
+                'cities' => ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru'],
+                'languages' => ['Swahili', 'Anglais', 'Kikuyu']
+            ],
+            'Lesotho' => [
+                'flag' => 'lesotho.svg',
+                'cities' => ['Maseru', 'Teyateyaneng', 'Leribe', 'Mafeteng'],
+                'languages' => ['Sesotho', 'Anglais', 'Zoulou']
+            ],
+            'Liberia' => [
+                'flag' => 'liberia.svg',
+                'cities' => ['Monrovia', 'Ganta', 'Buchanan', 'Kakata'],
+                'languages' => ['Anglais']
+            ],
+            'Libye' => [
+                'flag' => 'libya.svg',
+                'cities' => ['Tripoli', 'Benghazi', 'Misrata', 'Sirte'],
+                'languages' => ['Arabe']
+            ],
+            'Madagascar' => [
+                'flag' => 'madagascar.svg',
+                'cities' => ['Antananarivo', 'Toamasina', 'Antsirabe', 'Fianarantsoa', 'Diego', 'Mahajanga', 'Toliara'],
+                'languages' => ['Malgache', 'Français']
+            ],
+            'Malawi' => [
+                'flag' => 'malawi.svg',
+                'cities' => ['Lilongwe', 'Blantyre', 'Mzuzu', 'Zomba'],
+                'languages' => ['Chichewa', 'Anglais']
+            ],
+            'Mali' => [
+                'flag' => 'mali.svg',
+                'cities' => ['Bamako', 'Sikasso', 'Mopti', 'Segou'],
+                'languages' => ['Français', 'Bambara']
+            ],
+            'Mauritanie' => [
+                'flag' => 'mauritania.svg',
+                'cities' => ['Nouakchott', 'Nouadhibou', 'Kaédi', 'Zouérat'],
+                'languages' => ['Arabe']
+            ],
+            'Maurice' => [
+                'flag' => 'mauritius.svg',
+                'cities' => ['Port-Louis', 'Beau-Bassin Rose-Hill', 'Vacoas-Phoenix', 'Curepipe'],
+                'languages' => ['Français', 'Anglais', 'Créole mauricien']
+            ],
+            'Maroc' => [
+                'flag' => 'morocco.svg',
+                'cities' => ['Rabat', 'Casablanca', 'Fès', 'Marrakech'],
+                'languages' => ['Arabe', 'Berbère', 'Français']
+            ],
+            'Mozambique' => [
+                'flag' => 'mozambique.svg',
+                'cities' => ['Maputo', 'Matola', 'Beira', 'Nampula'],
+                'languages' => ['Portugais', 'Emakhuwa']
+            ],
+            'Namibie' => [
+                'flag' => 'namibia.svg',
+                'cities' => ['Windhoek', 'Rundu', 'Walvis Bay', 'Swakopmund'],
+                'languages' => ['Anglais', 'Afrikaans', 'Oshiwambo']
+            ],
+            'Niger' => [
+                'flag' => 'niger.svg',
+                'cities' => ['Niamey', 'Zinder', 'Maradi', 'Agadez'],
+                'languages' => ['Français', 'Arabe', 'Hausa']
+            ],
+            'Nigeria' => [
+                'flag' => 'nigeria.svg',
+                'cities' => ['Lagos', 'Kano', 'Ibadan', 'Abuja'],
+                'languages' => ['Anglais', 'Yoruba', 'Hausa', 'Igbo']
+            ],
+            'Ouganda' => [
+                'flag' => 'uganda.svg',
+                'cities' => ['Kampala', 'Mbarara', 'Jinja', 'Gulu'],
+                'languages' => ['Anglais', 'Swahili', 'Luganda']
+            ],
+            'Rwanda' => [
+                'flag' => 'rwanda.svg',
+                'cities' => ['Kigali', 'Butare', 'Gitarama', 'Ruhengeri'],
+                'languages' => ['Kinyarwanda', 'Anglais', 'Français']
+            ],
+            'Sao Tomé-et-Principe' => [
+                'flag' => 'sao_tome_and_principe.svg',
+                'cities' => ['São Tomé', 'Santo António', 'São João dos Angolares', 'Neves'],
+                'languages' => ['Portugais']
+            ],
+            'Sénégal' => [
+                'flag' => 'senegal.svg',
+                'cities' => ['Dakar', 'Thiès', 'Kaolack', 'Ziguinchor'],
+                'languages' => ['Français', 'Wolof', 'Pulaar']
+            ],
+            'Seychelles' => [
+                'flag' => 'seychelles.svg',
+                'cities' => ['Victoria', 'Anse Boileau', 'Bel Ombre', 'Beau Vallon'],
+                'languages' => ['Seychellois Creole', 'Anglais', 'Français']
+            ],
+            'Sierra Leone' => [
+                'flag' => 'sierra_leone.svg',
+                'cities' => ['Freetown', 'Bo', 'Kenema', 'Makeni'],
+                'languages' => ['Anglais', 'Krio']
+            ],
+            'Somalie' => [
+                'flag' => 'somalia.svg',
+                'cities' => ['Mogadishu', 'Hargeisa', 'Bosaso', 'Kismayo'],
+                'languages' => ['Somali', 'Arabe']
+            ],
+            'Afrique du Sud' => [
+                'flag' => 'south_africa.svg',
+                'cities' => ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'],
+                'languages' => ['Afrikaans', 'Anglais', 'Zoulou', 'Xhosa']
+            ],
+            'Soudan' => [
+                'flag' => 'sudan.svg',
+                'cities' => ['Khartoum', 'Omdurman', 'Port Sudan', 'Kassala'],
+                'languages' => ['Arabe', 'Anglais']
+            ],
+            'Soudan du Sud' => [
+                'flag' => 'south_sudan.svg',
+                'cities' => ['Juba', 'Wau', 'Malakal', 'Bor'],
+                'languages' => ['Anglais', 'Arabe']
+            ],
+            'Eswatini' => [
+                'flag' => 'eswatini.svg',
+                'cities' => ['Mbabane', 'Manzini', 'Big Bend', 'Malkerns'],
+                'languages' => ['Swazi', 'Anglais']
+            ],
+            'Tanzanie' => [
+                'flag' => 'tanzania.svg',
+                'cities' => ['Dodoma', 'Dar es Salaam', 'Mwanza', 'Arusha'],
+                'languages' => ['Swahili', 'Anglais']
+            ],
+            'Togo' => [
+                'flag' => 'togo.svg',
+                'cities' => ['Lomé', 'Sokodé', 'Kara', 'Palimé'],
+                'languages' => ['Français', 'Éwé', 'Kabyè']
+            ],
+            'Tunisie' => [
+                'flag' => 'tunisia.svg',
+                'cities' => ['Tunis', 'Sfax', 'Sousse', 'Kairouan'],
+                'languages' => ['Arabe', 'Français']
+            ],
+            'Zambie' => [
+                'flag' => 'zambia.svg',
+                'cities' => ['Lusaka', 'Ndola', 'Kitwe', 'Kabwe'],
+                'languages' => ['Anglais', 'Bemba', 'Nyanja']
+            ],
+            'Zimbabwe' => [
+                'flag' => 'zimbabwe.svg',
+                'cities' => ['Harare', 'Bulawayo', 'Chitungwiza', 'Mutare'],
+                'languages' => ['Anglais', 'Shona', 'Ndebele']
+            ],
+            ];
+            foreach ($countries as $name => $country) {
+                if (!is_array($country)) {
+                    continue;
+                }
+            
+                $pays = new Pays();
+                $pays->setName($name);
+            
+                $flag = new Flag();
+                $newPath = $newDir . '/' . $country['flag'];
+                copy($imgDir . '/' . $country['flag'], $newPath);
+                $flagFile = new UploadedFile($newPath, $country['flag'], null, null, true);
+                $flag->setFile($flagFile);
+                $pays->setFlag($flag);
+            
+                if (isset($country['languages']) && is_array($country['languages'])) {
+                    foreach ($country['languages'] as $language) {
+                        $lang = new Language();
+                        $lang->setLanguage($language);
+                        $lang->addPay($pays);
+            
+                        $manager->persist($lang);
+                    }
+                }
+            
+                $manager->persist($pays);
+            
+                if (isset($country['cities']) && is_array($country['cities'])) {
+                    foreach ($country['cities'] as $cityName) {
+                        $city = new City();
+                        $city->setName($cityName);
+                        $city->setCountry($pays);
+            
+                        $manager->persist($city);
+                    }
+                }
+            }
+            
+            
+              
+        
 
 
         $jobGrades = [

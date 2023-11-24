@@ -52,10 +52,11 @@ class Pays
 
     #[ORM\Column(length: 255)]
     #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
+    #[Groups(['aside_read', 'pays_read', 'cities_read'])]
     private ?string $name = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['aside_read', 'pays_read','cities_read'])]
     private ?Seal $seal = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
@@ -105,12 +106,17 @@ class Pays
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: Company::class, orphanRemoval: true)]
     private Collection $companies;
 
+    #[ORM\OneToMany(mappedBy: 'country', targetEntity: City::class, orphanRemoval: true)]
+    #[Groups(['aside_read', 'pays_read'])]
+    private Collection $cities;
+
 
     public function __construct()
     {
         $this->religions = new ArrayCollection();
         $this->languages = new ArrayCollection();
         $this->companies = new ArrayCollection();
+        $this->cities = new ArrayCollection();
     } 
 
     public function getId(): ?string
@@ -299,6 +305,36 @@ class Pays
     {
         if ($this->languages->removeElement($language)) {
             $language->removePay($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, City>
+     */
+    public function getCities(): Collection
+    {
+        return $this->cities;
+    }
+
+    public function addCity(City $city): static
+    {
+        if (!$this->cities->contains($city)) {
+            $this->cities->add($city);
+            $city->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCity(City $city): static
+    {
+        if ($this->cities->removeElement($city)) {
+            // set the owning side to null (unless already changed)
+            if ($city->getCountry() === $this) {
+                $city->setCountry(null);
+            }
         }
 
         return $this;

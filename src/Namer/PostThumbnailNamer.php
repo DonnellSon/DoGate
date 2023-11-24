@@ -29,7 +29,7 @@ class PostThumbnailNamer implements NamerInterface
         $request = $this->requestStack->getCurrentRequest();
 
         // Get the host from the request
-        $host = $request->getHost();
+        // $host = $request->getHost();
 
         // Get the upload directory from the mapping
         $uploadDirectory = $mapping->getUploadDestination();

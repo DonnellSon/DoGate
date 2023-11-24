@@ -51,8 +51,7 @@ class Pays
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
-    #[Groups(['aside_read', 'pays_read', 'cities_read'])]
+    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read','cities_read'])]
     private ?string $name = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]

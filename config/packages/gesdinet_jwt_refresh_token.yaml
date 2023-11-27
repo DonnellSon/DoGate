@@ -4,7 +4,7 @@ gesdinet_jwt_refresh_token:
       enabled: true
       same_site: none
       path: /     
-      domain: '%env(SITE_DOMAIN)%'
+      domain: '%env(COOKIE_DOMAIN)%'
       http_only: false
       secure: true
       remove_token_from_body: true

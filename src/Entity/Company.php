@@ -9,6 +9,7 @@ use App\Entity\CompanyLogo;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Link;
+use App\Filter\OrSearchFilter;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
@@ -70,7 +71,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [new GetCollection()]
 )]
 
-
+#[ApiFilter(SearchFilter::class, properties: ["name" => "partial","description" => "partial"])]
+#[ApiFilter(OrSearchFilter::class, properties: ["name" => "partial","description" => "partial"])]
 class Company extends Author
 {
 

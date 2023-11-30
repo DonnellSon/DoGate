@@ -25,6 +25,7 @@
         "symfony/console": "6.3.*",
         "symfony/expression-language": "6.3.*",
         "symfony/flex": "^2",
+        "symfony/form": "6.3.*",
         "symfony/framework-bundle": "6.3.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/property-access": "6.3.*",
@@ -89,6 +90,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",
+        "phpunit/phpunit": "^10.4",
         "symfony/debug-bundle": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/maker-bundle": "^1.50",

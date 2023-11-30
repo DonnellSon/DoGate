@@ -8,6 +8,7 @@ use App\Entity\Pays;
 use App\Entity\Domain;
 use App\Entity\Gender;
 use App\Entity\JobType;
+use App\Entity\Currency;
 use App\Entity\JobGrade;
 use App\Entity\Language;
 use App\Entity\CompanySize;
@@ -560,6 +561,70 @@ class AppFixtures extends Fixture
             "Entreprise de gestion de la chaîne d'approvisionnement",
         ];
 
+        $currencies = [
+            "US Dollar" => [
+                "symbol" => "$",
+                "code" => "USD"
+            ],
+            "Euro" => [
+                "symbol" => "€",
+                "code" => "EUR"
+            ],
+            "Japanese Yen" => [
+                "symbol" => "¥",
+                "code" => "JPY"
+            ],
+            "British Pound Sterling" => [
+                "symbol" => "£",
+                "code" => "GBP"
+            ],
+            "Ariary Malagasy" => [
+                "symbol" => "Ar",
+                "code" => "MGA"
+            ],
+            "Australian Dollar" => [
+                "symbol" => "A$",
+                "code" => "AUD"
+            ],
+            "Canadian Dollar" => [
+                "symbol" => "CA$",
+                "code" => "CAD"
+            ],
+            "Swiss Franc" => [
+                "symbol" => "CHF",
+                "code" => "CHF"
+            ],
+            "Chinese Yuan" => [
+                "symbol" => "¥",
+                "code" => "CNY"
+            ],
+            "Swedish Krona" => [
+                "symbol" => "kr",
+                "code" => "SEK"
+            ],
+            "Norwegian Krone" => [
+                "symbol" => "kr",
+                "code" => "NOK"
+            ],
+            "Indian Rupee" => [
+                "symbol" => "₹",
+                "code" => "INR"
+            ],
+            "Brazilian Real" => [
+                "symbol" => "R$",
+                "code" => "BRL"
+            ],
+            "South African Rand" => [
+                "symbol" => "R",
+                "code" => "ZAR"
+            ],
+            "Mexican Peso" => [
+                "symbol" => "Mex$",
+                "code" => "MXN"
+            ],
+            // Ajoutez d'autres devises selon vos besoins
+        ];
+
 
         foreach ($jobGrades as $value) {
             $jobGrade = new JobGrade();
@@ -590,6 +655,13 @@ class AppFixtures extends Fixture
             $companyType = new CompanyType();
             $companyType->setType($value);
             $manager->persist($companyType);
+        }
+        foreach ($currencies as $name=>$c) {
+            $currency = new Currency();
+            $currency->setName($name);
+            $currency->setCode($c["code"]);
+            $currency->setSymbol($c["symbol"]);
+            $manager->persist($currency);
         }
 
         $manager->flush();

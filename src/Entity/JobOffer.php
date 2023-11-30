@@ -2,18 +2,34 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobOfferRepository;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\CreateJobOfferController;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Post as MetadataPost;
 
 #[ORM\Entity(repositoryClass: JobOfferRepository::class)]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['job_offers_read']
     ],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(),
+        new Patch(),
+        new MetadataPost(
+            controller: CreateJobOfferController::class,
+            deserialize: false
+        ),
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 class JobOffer
@@ -27,10 +43,6 @@ class JobOffer
     #[ORM\Column(length: 255)]
     #[Groups(['users_read','job_offers_read'])]
     private ?string $title = null;
-
-    #[ORM\Column]
-    #[Groups(['users_read','job_offers_read'])]
-    private array $salary = [];
 
     #[ORM\Column]
     #[Groups(['users_read','job_offers_read'])]
@@ -62,6 +74,9 @@ class JobOffer
     #[ORM\JoinColumn(nullable: false)]
     private ?JobType $type = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Salary $salary = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -81,18 +96,6 @@ class JobOffer
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getSalary(): array
-    {
-        return $this->salary;
-    }
-
-    public function setSalary(array $salary): static
-    {
-        $this->salary = $salary;
 
         return $this;
     }
@@ -189,6 +192,18 @@ class JobOffer
     public function setType(?JobType $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSalary(): ?Salary
+    {
+        return $this->salary;
+    }
+
+    public function setSalary(?Salary $salary): static
+    {
+        $this->salary = $salary;
 
         return $this;
     }

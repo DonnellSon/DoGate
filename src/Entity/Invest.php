@@ -30,6 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as AppAssert;
 
 #[ORM\Entity(repositoryClass: InvestRepository::class)]
 #[HasLifecycleCallbacks]
@@ -70,42 +71,42 @@ class Invest
 
     #[ORM\Column(length: 255)]
     #[Groups(['company_read', 'invest_read'])]
+    #[Assert\NotBlank(message:'Le titre est obligatoire !')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank([
-        'message' => 'ce champ est obligatoire'
-    ])]
+    #[Assert\NotBlank(message:'La déscription est obligatoire !')]
     #[Groups(['company_read', 'invest_read'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank([
-        'message' => 'ce champ est obligatoire'
-    ])]
-    #[Groups(['company_read', 'invest_read'])]
-    private ?string $need = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank([
-        'message' => 'ce champ est obligatoire'
-    ])]
-    #[Groups(['company_read', 'invest_read'])]
-    private ?string $collected = null;
 
     #[ORM\ManyToMany(targetEntity: Domain::class, mappedBy: 'invest')]
     #[ORM\JoinColumn(name: "domain-invest")]
     #[Groups(['company_read', 'invest_read'])]
-    private Collection $domains;
+    #[Assert\NotNull(message:'Vous devez specifier au moins un domaine !')]
+    #[Assert\Count([
+        'min'=>'1',
+        'minMessage'=>'Vous devez specifier au moins un domaine !'
+    ])]
+    private ?Collection $domains;
 
     #[ORM\ManyToOne(targetEntity: Author::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['posts_read', 'image_read', 'invest_read'])]
+    #[Assert\NotBlank(message:'Vous devez specifier un auteur !')]
     private ?Author $author = null;
 
     #[ORM\OneToMany(mappedBy: 'invest', targetEntity: InvestPicture::class)]
     #[Groups(['image_read', 'invest_read'])]
     private Collection $investPictures;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message:"Le besoin doit etre composé d'un montant et d'une devise !")]
+    private ?Amount $need = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Amount $collected = null;
 
 
     public function __construct()
@@ -124,7 +125,7 @@ class Invest
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
@@ -136,33 +137,9 @@ class Invest
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getNeed(): ?string
-    {
-        return $this->need;
-    }
-
-    public function setNeed(string $need): static
-    {
-        $this->need = $need;
-
-        return $this;
-    }
-
-    public function getCollected(): ?string
-    {
-        return $this->collected;
-    }
-
-    public function setCollected(string $collected): static
-    {
-        $this->collected = $collected;
 
         return $this;
     }
@@ -171,7 +148,7 @@ class Invest
     /**
      * @return Collection<int, Domain>
      */
-    public function getDomains(): Collection
+    public function getDomains(): ?Collection
     {
         return $this->domains;
     }
@@ -232,6 +209,30 @@ class Invest
                 $investPicture->setInvest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNeed(): ?Amount
+    {
+        return $this->need;
+    }
+
+    public function setNeed(?Amount $need): static
+    {
+        $this->need = $need;
+
+        return $this;
+    }
+
+    public function getCollected(): ?Amount
+    {
+        return $this->collected;
+    }
+
+    public function setCollected(?Amount $collected): static
+    {
+        $this->collected = $collected;
 
         return $this;
     }

@@ -36,6 +36,6 @@ vich_uploader:
         flag_upload:
             uri_prefix: /upload/img/flag
             upload_destination: '%kernel.project_dir%/public/upload/img/flag'
-            namer: App\Namer\PostThumbnailNamer
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
             delete_on_update: true
             delete_on_remove: true

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Company;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
+use App\Filter\FilterByAuthor;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(CompanyTypeTitleFilter::class,properties:['companyTypeTitles'=>'exact'])]
 #[ApiFilter(CompanySizeFilter::class,properties:['companySizes'=>'exact'])]
+#[ApiFilter(FilterByAuthor::class,properties:['or'])]
 #[ApiFilter(SearchFilter::class, properties: ["title" => "exact", 
 "description" => "partial",
 "need" => "partial",

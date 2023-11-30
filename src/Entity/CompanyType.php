@@ -8,7 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CompanyTypeRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyTypeRepository::class)]
@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['ct_read']
     ],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['type' => 'partial'])]
 class CompanyType
 {
     #[ORM\Id]

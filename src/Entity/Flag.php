@@ -6,13 +6,14 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
+use App\Controller\FlagController;
 use App\Repository\FlagRepository;
 use Symfony\Component\Dotenv\Dotenv;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
-use App\Controller\FlagController;
 use ApiPlatform\Metadata\Post as MetadataPost;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: FlagRepository::class)]
@@ -39,6 +40,7 @@ class Flag
     private ?string $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['country_list','company_read', 'invest_read', 'posts_read'])]
     private ?string $fileUrl = null;
 
     #[Vich\UploadableField(mapping: 'flag_upload', fileNameProperty: 'fileName')]

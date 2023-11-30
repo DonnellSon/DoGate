@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use App\Entity\Religion;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
@@ -22,9 +24,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaysRepository::class)]
 #[ApiResource(
-    normalizationContext:[
-        'groups' => ['aside_read','pays_read']
-    ],
     operations: [
         new Get(),
         new GetCollection(),
@@ -37,6 +36,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete()
     ]
 )]
+#[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups', 'overrideDefaultGroups' => false])]
 #[ApiFilter(SearchFilter::class, properties: ["name" => "partial", 
 "religion.religion" => "partial",
 "aside.internetTld" => "exact",
@@ -47,11 +47,11 @@ class Pays
     #[ORM\Column(type: "string", unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'App\Doctrine\Base58UuidGenerator')]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['aside_read', 'pays_read', 'cities_read'])]
+    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read','cities_read'])]
     private ?string $name = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
@@ -67,7 +67,7 @@ class Pays
     private ?Aside $aside = null;
 
     #[ORM\OneToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['aside_read', 'pays_read','country_list','company_read', 'invest_read', 'posts_read'])]
     private ?Flag $flag = null;
 
     #[ORM\ManyToOne(inversedBy: 'pays', cascade: ['persist', 'remove'])]
@@ -102,6 +102,9 @@ class Pays
     #[Groups(['aside_read', 'pays_read'])]
     private Collection $languages;
 
+    #[ORM\OneToMany(mappedBy: 'country', targetEntity: Company::class, orphanRemoval: true)]
+    private Collection $companies;
+
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: City::class, orphanRemoval: true)]
     #[Groups(['aside_read', 'pays_read'])]
     private Collection $cities;
@@ -114,6 +117,7 @@ class Pays
     {
         $this->religions = new ArrayCollection();
         $this->languages = new ArrayCollection();
+        $this->companies = new ArrayCollection();
         $this->cities = new ArrayCollection();
         $this->paysPosts = new ArrayCollection();
     } 
@@ -333,6 +337,36 @@ class Pays
             // set the owning side to null (unless already changed)
             if ($city->getCountry() === $this) {
                 $city->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Company>
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Company $company): static
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies->add($company);
+            $company->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): static
+    {
+        if ($this->companies->removeElement($company)) {
+            // set the owning side to null (unless already changed)
+            if ($company->getCountry() === $this) {
+                $company->setCountry(null);
             }
         }
 

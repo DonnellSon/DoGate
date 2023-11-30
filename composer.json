@@ -25,6 +25,7 @@
         "symfony/console": "6.3.*",
         "symfony/expression-language": "6.3.*",
         "symfony/flex": "^2",
+        "symfony/form": "6.3.*",
         "symfony/framework-bundle": "6.3.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/property-access": "6.3.*",

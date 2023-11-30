@@ -1,6 +1,5 @@
 <?php
 
- // src/Filter/HotelFilter.php
  namespace App\Filter;
 
  use Doctrine\ORM\QueryBuilder;

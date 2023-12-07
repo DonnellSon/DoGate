@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use App\Entity\Post;
 use App\Entity\Image;
+use App\Entity\Travel;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AuthorRepository;
 use ApiPlatform\Metadata\ApiResource;
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name:"commentable_type", type:"string")]
-#[ORM\DiscriminatorMap(["post" => Post::class,"image"=>Image::class])]
+#[ORM\DiscriminatorMap(["post" => Post::class,"image"=>Image::class, "travel" => Travel::class])]
 abstract class CommentableEntity
 {
     #[ORM\Id]

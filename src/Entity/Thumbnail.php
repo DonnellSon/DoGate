@@ -47,6 +47,9 @@ class Thumbnail extends ImageEntity
     #[Groups(['posts_read','image_read','users_read'])]
     private ?string $fileUrl = null;
 
+    #[ORM\ManyToOne(inversedBy: 'thumbnails')]
+    private ?Travel $travel = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -151,6 +154,18 @@ class Thumbnail extends ImageEntity
     public function setFileUrl(string $fileUrl): static
     {
         $this->fileUrl = $fileUrl;
+
+        return $this;
+    }
+
+    public function getTravel(): ?Travel
+    {
+        return $this->travel;
+    }
+
+    public function setTravel(?Travel $travel): static
+    {
+        $this->travel = $travel;
 
         return $this;
     }

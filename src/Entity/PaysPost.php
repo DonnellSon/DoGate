@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
-use App\Entity\PaysFiles;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\PaysFile;
+// use ApiPlatform\Metadata\Get;
+// use ApiPlatform\Metadata\Put;
+// use ApiPlatform\Metadata\Patch;
+// use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PaysPostRepository;
+// use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
+// use ApiPlatform\Metadata\Post as MetadataPost;
+// use App\Controller\PayPostController;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: PaysPostRepository::class)]
+#[ApiResource()]
 class PaysPost
 {
     #[ORM\Id]

@@ -53,6 +53,9 @@ class Evaluation
     #[Groups(['posts_read','eval_read'])]
     private ?Author $author = null;
 
+    #[ORM\ManyToOne(inversedBy: 'evaluation')]
+    private ?Travel $travel = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +81,18 @@ class Evaluation
     public function setAuthor(?Author $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getTravel(): ?Travel
+    {
+        return $this->travel;
+    }
+
+    public function setTravel(?Travel $travel): static
+    {
+        $this->travel = $travel;
 
         return $this;
     }

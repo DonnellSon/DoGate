@@ -33,6 +33,9 @@ class CustomField
     #[ORM\Column(length: 255)]
     private ?string $entityId = null;
 
+    #[ORM\ManyToOne(inversedBy: 'customFields')]
+    private ?About $customField = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -96,6 +99,18 @@ class CustomField
     public function setEntityId(string $entityId): static
     {
         $this->entityId = $entityId;
+
+        return $this;
+    }
+
+    public function getCustomField(): ?About
+    {
+        return $this->customField;
+    }
+
+    public function setCustomField(?About $customField): static
+    {
+        $this->customField = $customField;
 
         return $this;
     }

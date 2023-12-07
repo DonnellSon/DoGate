@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Author;
 use App\Entity\Domain;
-use App\Entity\Evaluation;
 use App\Entity\CompanyLogo;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;

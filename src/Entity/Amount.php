@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\AmountRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AmountRepository::class)]
 #[ApiResource]
@@ -17,11 +18,13 @@ class Amount
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['invest_read'])]
     private ?int $value = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank(message:'Veuillez specifier votre devise !')]
+    #[Groups(['invest_read'])]
     private ?Currency $currency = null;
 
     public function getId(): ?int

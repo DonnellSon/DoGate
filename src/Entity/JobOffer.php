@@ -14,6 +14,7 @@ use App\Controller\CreateJobOfferController;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Post as MetadataPost;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: JobOfferRepository::class)]
 #[ApiResource(
@@ -42,6 +43,7 @@ class JobOffer
 
     #[ORM\Column(length: 255)]
     #[Groups(['users_read','job_offers_read'])]
+    #[Assert\NotBlank(message:'Le titre est obligatoire !')]
     private ?string $title = null;
 
     #[ORM\Column]
@@ -61,20 +63,28 @@ class JobOffer
 
     #[ORM\Column(length: 255)]
     #[Groups(['users_read','job_offers_read'])]
+    #[Assert\NotBlank(message:'La déscription est obligatoire !')]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
     #[Groups(['users_read','job_offers_read'])]
+    #[Assert\NotBlank(message:'L\'auteur est obligatoire !')]
     private ?Author $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    #[Assert\NotBlank(message:'Le grade est obligatoire !')]
+    #[Groups(['users_read','job_offers_read'])]
     private ?JobGrade $grade = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message:'Le type est obligatoire !')]
+    #[Groups(['users_read','job_offers_read'])]
     private ?JobType $type = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Assert\NotBlank(message:'Le salaire est obligatoire !')]
+    #[Groups(['users_read','job_offers_read'])]
     private ?Salary $salary = null;
 
     public function __construct()
@@ -93,7 +103,7 @@ class JobOffer
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
@@ -153,7 +163,7 @@ class JobOffer
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 

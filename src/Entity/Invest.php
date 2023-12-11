@@ -49,17 +49,19 @@ use App\Validator\Constraints as AppAssert;
         ),
     ]
 )]
-#[ApiFilter(CompanyTypeTitleFilter::class,properties:['companyTypeTitles'=>'exact'])]
-#[ApiFilter(CompanySizeFilter::class,properties:['companySizes'=>'exact'])]
-#[ApiFilter(FilterByAuthor::class,properties:['or'])]
-#[ApiFilter(SearchFilter::class, properties: ["title" => "exact", 
-"description" => "partial",
-"need" => "partial",
-"domaine.title" => "partial",
-"author.companies.name" => "exact",
-"author.pays" => "partial",
-"author.companytypes.type" => "exact",
-"collected" => "partial"])]
+#[ApiFilter(CompanyTypeTitleFilter::class, properties: ['companyTypeTitles' => 'exact'])]
+#[ApiFilter(CompanySizeFilter::class, properties: ['companySizes' => 'exact'])]
+#[ApiFilter(FilterByAuthor::class, properties: ['company.name', 'company.description', 'user.firstName', 'user.lastName'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    "title" => "exact",
+    "description" => "partial",
+    "need" => "partial",
+    "domaine.title" => "partial",
+    "author.companies.name" => "exact",
+    "author.pays" => "partial",
+    "author.companytypes.type" => "exact",
+    "collected" => "partial"
+])]
 class Invest
 {
     #[ORM\Id]
@@ -71,11 +73,11 @@ class Invest
 
     #[ORM\Column(length: 255)]
     #[Groups(['company_read', 'invest_read'])]
-    #[Assert\NotBlank(message:'Le titre est obligatoire !')]
+    #[Assert\NotBlank(message: 'Le titre est obligatoire !')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message:'La déscription est obligatoire !')]
+    #[Assert\NotBlank(message: 'La déscription est obligatoire !')]
     #[Groups(['company_read', 'invest_read'])]
     private ?string $description = null;
 
@@ -83,17 +85,17 @@ class Invest
     #[ORM\ManyToMany(targetEntity: Domain::class, mappedBy: 'invest')]
     #[ORM\JoinColumn(name: "domain-invest")]
     #[Groups(['company_read', 'invest_read'])]
-    #[Assert\NotNull(message:'Vous devez specifier au moins un domaine !')]
+    #[Assert\NotNull(message: 'Vous devez specifier au moins un domaine !')]
     #[Assert\Count([
-        'min'=>'1',
-        'minMessage'=>'Vous devez specifier au moins un domaine !'
+        'min' => '1',
+        'minMessage' => 'Vous devez specifier au moins un domaine !'
     ])]
     private ?Collection $domains;
 
     #[ORM\ManyToOne(targetEntity: Author::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['posts_read', 'image_read', 'invest_read'])]
-    #[Assert\NotBlank(message:'Vous devez specifier un auteur !')]
+    #[Assert\NotBlank(message: 'Vous devez specifier un auteur !')]
     private ?Author $author = null;
 
     #[ORM\OneToMany(mappedBy: 'invest', targetEntity: InvestPicture::class)]
@@ -102,10 +104,12 @@ class Invest
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message:"Le besoin doit etre composé d'un montant et d'une devise !")]
+    #[Assert\NotBlank(message: "Le besoin doit etre composé d'un montant et d'une devise !")]
+    #[Groups(['image_read', 'invest_read'])]
     private ?Amount $need = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(['image_read', 'invest_read'])]
     private ?Amount $collected = null;
 
 

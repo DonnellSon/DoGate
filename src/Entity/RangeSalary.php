@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name:"range_salaries")]
@@ -12,9 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class RangeSalary extends Salary
 {
     #[ORM\Column(type:"integer")]
+    #[Groups(['users_read','job_offers_read'])]
     private $min;
 
     #[ORM\Column(type:"integer")]
+    #[Groups(['users_read','job_offers_read'])]
     private $max;
 
     /**

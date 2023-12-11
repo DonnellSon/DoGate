@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Entity\ExactSalary;
 use App\Entity\RangeSalary;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name:"salaries")]
@@ -19,10 +20,12 @@ class Salary
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"AUTO")]
     #[ORM\Column(type:"integer")]
+    #[Groups(['users_read','job_offers_read'])]
     private $id;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['users_read','job_offers_read'])]
     private ?Currency $currency = null;
 
     /**

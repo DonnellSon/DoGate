@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name:"exact_salaries")]
@@ -12,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ExactSalary extends Salary
 {
     #[ORM\Column(type:"integer")]
+    #[Groups(['users_read','job_offers_read'])]
     private $amount;
 
     /**

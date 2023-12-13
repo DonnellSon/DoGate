@@ -11,16 +11,14 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobOfferRepository;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\CreateJobOfferController;
+use ApiPlatform\Metadata\Post as MetadataPost;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\Post as MetadataPost;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: JobOfferRepository::class)]
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['job_offers_read']
-    ],
     operations: [
         new GetCollection(),
         new Get(),
@@ -32,17 +30,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
+#[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups', 'overrideDefaultGroups' => false, 'whitelist' => ['job_titles','job_offers_read']])]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 class JobOffer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['users_read','job_offers_read'])]
+    #[Groups(['users_read','job_offers_read','job_titles'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['users_read','job_offers_read'])]
+    #[Groups(['users_read','job_offers_read','job_titles'])]
     #[Assert\NotBlank(message:'Le titre est obligatoire !')]
     private ?string $title = null;
 

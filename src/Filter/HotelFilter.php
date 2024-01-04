@@ -11,10 +11,6 @@
  {
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operationName = null,array $context = []): void
     {
-        if ($property === 'location' && $value !== null) {
-            $queryBuilder->andWhere('o.location = :destination');
-            $queryBuilder->setParameter('destination', $value);
-        }
 
         if ($property === 'arrive' && $value !== null) {
             $queryBuilder->andWhere('o.arrive >= :arrive');

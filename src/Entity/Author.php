@@ -69,12 +69,6 @@ abstract class Author
     #[ORM\OneToMany(targetEntity:Contact::class, mappedBy:"receiver")]
     private $receivedRequests;
 
-    #[ORM\OneToMany(targetEntity:RequestE::class, mappedBy:"requester")]
-    private $sentRequestsE;
-
-    #[ORM\OneToMany(targetEntity:RequestE::class, mappedBy:"receiver")]
-    private $receivedRequestsE;
-
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: JobOffer::class)]
     private Collection $jobOffers;
 
@@ -87,6 +81,9 @@ abstract class Author
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Travel::class)]
     private Collection $travel;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservation::class)]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -95,12 +92,11 @@ abstract class Author
         $this->invests = new ArrayCollection();
         $this->sentRequests = new ArrayCollection();
         $this->receivedRequests = new ArrayCollection();
-        $this->sentRequestsE = new ArrayCollection();
-        $this->receivedRequestsE = new ArrayCollection();
         $this->jobOffers = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
         $this->recommendeds = new ArrayCollection();
         $this->travel = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -286,64 +282,6 @@ abstract class Author
         return $this;
     }
 
-    /**---------------------------------Request----------------------------- **/
-
-    public function getSentRequestsE(): Collection
-    {
-        return $this->sentRequestsE;
-    }
-
-    public function addSentRequestE(RequestE $request): self
-    {
-        if (!$this->sentRequestsE->contains($request)) {
-            $this->sentRequestsE[] = $request;
-            $request->setRequester($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSentRequestE(RequestE $request): self
-    {
-        if ($this->sentRequestsE->contains($request)) {
-            $this->sentRequestsE->removeElement($request);
-            // set the owning side to null (unless already changed)
-            if ($request->getRequester() === $this) {
-                $request->setRequester(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getReceivedRequestsE(): Collection
-    {
-        return $this->receivedRequestsE;
-    }
-
-    public function addReceivedRequestE(RequestE $request): self
-    {
-        if (!$this->receivedRequestsE->contains($request)) {
-            $this->receivedRequestsE[] = $request;
-            $request->setReceiver($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReceivedRequestE(requestE $request): self
-    {
-        if ($this->receivedRequestsE->contains($request)) {
-            $this->receivedRequestsE->removeElement($request);
-            // set the owning side to null (unless already changed)
-            if ($request->getReceiver() === $this) {
-                $request->setReceiver(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * Get accepted contacts
      *
@@ -480,6 +418,36 @@ abstract class Author
             // set the owning side to null (unless already changed)
             if ($travel->getAuthor() === $this) {
                 $travel->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
             }
         }
 

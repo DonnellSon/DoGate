@@ -19,15 +19,11 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Controller\GetPostController;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Controller\PostThumbUploadController;
 use ApiPlatform\Metadata\Post as MetadataPost;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\TravelController;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -77,12 +73,16 @@ class Travel extends CommentableEntity
     #[ORM\OneToMany(mappedBy: 'travel', targetEntity: Evaluation::class)]
     private Collection $evaluation;
 
+    #[ORM\OneToMany(mappedBy: 'travel', targetEntity: Reservation::class)]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->thumbnails = new ArrayCollection();
         $this->evaluation = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getContent(): ?string
@@ -188,6 +188,36 @@ class Travel extends CommentableEntity
             // set the owning side to null (unless already changed)
             if ($evaluation->getTravel() === $this) {
                 $evaluation->setTravel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setTravel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getTravel() === $this) {
+                $reservation->setTravel(null);
             }
         }
 

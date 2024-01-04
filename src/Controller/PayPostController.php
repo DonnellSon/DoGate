@@ -7,14 +7,6 @@ use App\Entity\Pays;
 use App\Entity\Seal;
 use App\Entity\Aside;
 use App\Entity\Language;
-use App\Entity\Location;
-use App\Entity\PaysCultures;
-use App\Entity\PaysDemog;
-use App\Entity\PaysEconomy;
-use App\Entity\PaysGeography;
-use App\Entity\PaysGouvernment;
-use App\Entity\PaysHistory;
-use App\Entity\PaysPost;
 use App\Entity\Religion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,23 +25,20 @@ class PayPostController extends AbstractController
 
         $pays = new Pays();
         $pays->setName($paysData['name']);
-
-        $aside =  $serializer->deserialize($paysData['aside'], Aside::class,'json');
-
-        $aside->setMotto($aside->getMotto());
-        $aside->setAnthem($aside->getAnthem());
-        $aside->setArea($aside->getArea());
-        $aside->setPopulation($aside->getPopulation());
-        $aside->setPopulationDensity($aside->getPopulationDensity());
-        $aside->setGdp($aside->getGdp());
-        $aside->setGdpNominal($aside->getGdpNominal());
-        $aside->setHdi($aside->getHdi());
-        $aside->setCurrency($aside->getCurrency());
-        $aside->setDrivingSide($aside->getDrivingSide());
-        $aside->setCallingCode($aside->getCallingCode());
-        $aside->setInternetTld($aside->getInternetTld());
-
-        $pays->setAside($aside);
+        
+        $pays->setMotto($paysData['aside']['motto']);
+        $pays->setAnthem($paysData['aside']['anthem']);
+        $pays->setArea($paysData['aside']['area']);
+        $pays->setPopulation($paysData['aside']['population']);
+        $pays->setPopulationDensity($paysData['aside']['populationDensity']);
+        $pays->setGdp($paysData['aside']['gdp']);
+        $pays->setGdpNominal($paysData['aside']['gdpNominal']);
+        $pays->setHdi($paysData['aside']['hdi']);
+        $pays->setCurrency($paysData['aside']['currency']);
+        $pays->setDrivingSide($paysData['aside']['drivingSide']);
+        $pays->setCallingCode($paysData['aside']['callingCode']);
+        $pays->setInternetTld($paysData['aside']['internetTld']);
+        
 
         $flagFile = $request->files->get('flag');
         if ($flagFile)
@@ -107,13 +96,13 @@ class PayPostController extends AbstractController
 
         // Créer une nouvelle instance de Location et définir les valeurs de longitude et latitude
 
-        $location =  $serializer->deserialize($paysData['location'], Location::class,'json');
-        if (isset($paysData['location']))
-        {
-          $location->setLongitude($location->getLongitude());
-          $location->setLatitude($location->getLatitude());
-        }
-        $pays->setLocation($location);
+        // $location =  $serializer->deserialize($paysData['location'], Location::class,'json');
+        // if (isset($paysData['location']))
+        // {
+        //   $location->setLongitude($location->getLongitude());
+        //   $location->setLatitude($location->getLatitude());
+        // }
+        // $pays->setLocation($location);
 
 
         // Créer une nouvelle instance des religion et définir les valeurs de religion
@@ -141,9 +130,9 @@ class PayPostController extends AbstractController
         // $entityManager->persist($demog);
         // $entityManager->persist($cultures);
         // $entityManager->persist($gouvernment);
+        // $entityManager->persist($location);
+        // $entityManager->persist($aside);
 
-        $entityManager->persist($aside);
-        $entityManager->persist($location);
         $entityManager->persist($religion);
         $entityManager->persist($language);
         $entityManager->persist($pays);

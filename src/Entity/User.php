@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Author;
+use App\Entity\Reservation;
 use App\Entiy\SenderEntity;
 use ApiPlatform\Metadata\Get;
 use App\Entity\ProfilePicture;
@@ -106,13 +107,27 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $discordId = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $highSchool = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $university = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $experience = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $certification = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lisence = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $skills = null;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recommended::class)]
     #[Groups(['users_read', 'posts_read'])]
     private Collection $recommended;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['users_read', 'posts_read'])]
-    private ?About $about = null;
 
     #[ORM\ManyToMany(targetEntity: Domain::class, inversedBy: 'users')]
     #[Groups(['users_read', 'posts_read'])]
@@ -359,6 +374,79 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
         return $this;
     }
 
+    public function getHighSchool(): ?string
+    {
+        return $this->highSchool;
+    }
+
+    public function setHighSchool(string $highSchool): static
+    {
+        $this->highSchool = $highSchool;
+
+        return $this;
+    }
+
+    public function getUniversity(): ?string
+    {
+        return $this->university;
+    }
+
+    public function setUniversity(?string $university): static
+    {
+        $this->university = $university;
+
+        return $this;
+    }
+
+    public function getExperience(): ?string
+    {
+        return $this->experience;
+    }
+
+    public function setExperience(?string $experience): static
+    {
+        $this->experience = $experience;
+
+        return $this;
+    }
+
+    public function getCertification(): ?string
+    {
+        return $this->certification;
+    }
+
+    public function setCertification(?string $certification): static
+    {
+        $this->certification = $certification;
+
+        return $this;
+    }
+
+    public function getLisence(): ?string
+    {
+        return $this->lisence;
+    }
+
+    public function setLisence(string $lisence): static
+    {
+        $this->lisence = $lisence;
+
+        return $this;
+    }
+
+    public function getSkills(): ?string
+    {
+        return $this->skills;
+    }
+
+    public function setSkills(string $skills): static
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+
     /**
      * @return Collection<int, Recommended>
      */
@@ -389,18 +477,6 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
         return $this;
     }
 
-    public function getAbout(): ?About
-    {
-        return $this->about;
-    }
-
-    public function setAbout(?About $about): static
-    {
-        $this->about = $about;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Domain>
      */
@@ -424,5 +500,4 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
 
         return $this;
     }
-    
 }

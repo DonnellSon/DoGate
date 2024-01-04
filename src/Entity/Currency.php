@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
 #[ApiResource]
@@ -16,6 +17,7 @@ class Currency
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['invest_read'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]

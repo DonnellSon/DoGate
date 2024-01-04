@@ -7,6 +7,7 @@ use App\Repository\JobTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: JobTypeRepository::class)]
 #[ApiResource]
@@ -18,6 +19,7 @@ class JobType
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['users_read','job_offers_read'])]
     private ?string $title = null;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: JobOffer::class, orphanRemoval: true)]

@@ -8,6 +8,7 @@ use App\Entity\Evaluation;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use App\Entity\PostEvaluation;
+use App\Filter\OrFilterAuthorProperties;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
@@ -62,6 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['content' => 'exact'])]
+#[ApiFilter(OrFilterAuthorProperties::class,properties:['user.firstname','user.lastName','company.name','company.description'])]
 class Post extends CommentableEntity
 {
 

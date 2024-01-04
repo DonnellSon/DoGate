@@ -2,35 +2,48 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobOfferRepository;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\CreateJobOfferController;
+use ApiPlatform\Metadata\Post as MetadataPost;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: JobOfferRepository::class)]
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['job_offers_read']
-    ],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(),
+        new Patch(),
+        new MetadataPost(
+            controller: CreateJobOfferController::class,
+            deserialize: false
+        ),
+    ]
 )]
+#[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups', 'overrideDefaultGroups' => false, 'whitelist' => ['job_titles','job_offers_read']])]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 class JobOffer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['users_read','job_offers_read'])]
+    #[Groups(['users_read','job_offers_read','job_titles'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['users_read','job_offers_read'])]
+    #[Groups(['users_read','job_offers_read','job_titles'])]
+    #[Assert\NotBlank(message:'Le titre est obligatoire !')]
     private ?string $title = null;
-
-    #[ORM\Column]
-    #[Groups(['users_read','job_offers_read'])]
-    private array $salary = [];
 
     #[ORM\Column]
     #[Groups(['users_read','job_offers_read'])]
@@ -49,18 +62,29 @@ class JobOffer
 
     #[ORM\Column(length: 255)]
     #[Groups(['users_read','job_offers_read'])]
+    #[Assert\NotBlank(message:'La déscription est obligatoire !')]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
     #[Groups(['users_read','job_offers_read'])]
+    #[Assert\NotBlank(message:'L\'auteur est obligatoire !')]
     private ?Author $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    #[Assert\NotBlank(message:'Le grade est obligatoire !')]
+    #[Groups(['users_read','job_offers_read'])]
     private ?JobGrade $grade = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobOffers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message:'Le type est obligatoire !')]
+    #[Groups(['users_read','job_offers_read'])]
     private ?JobType $type = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Assert\NotBlank(message:'Le salaire est obligatoire !')]
+    #[Groups(['users_read','job_offers_read'])]
+    private ?Salary $salary = null;
 
     public function __construct()
     {
@@ -78,21 +102,9 @@ class JobOffer
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getSalary(): array
-    {
-        return $this->salary;
-    }
-
-    public function setSalary(array $salary): static
-    {
-        $this->salary = $salary;
 
         return $this;
     }
@@ -150,7 +162,7 @@ class JobOffer
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -189,6 +201,18 @@ class JobOffer
     public function setType(?JobType $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSalary(): ?Salary
+    {
+        return $this->salary;
+    }
+
+    public function setSalary(?Salary $salary): static
+    {
+        $this->salary = $salary;
 
         return $this;
     }

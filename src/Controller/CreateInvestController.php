@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Amount;
 use App\Entity\Image;
 use App\Entity\Invest;
-use DateTimeImmutable;
 use App\Entity\Company;
 use App\Entity\CompanyLogo;
 use App\Entity\InvestPicture;
@@ -14,44 +14,84 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[AsController]
 class CreateInvestController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager, private IriConverterInterface $iriConverter,private Security $security)
+
+    private $validator;
+
+    public function __construct(private EntityManagerInterface $entityManager, private IriConverterInterface $iriConverter, private Security $security)
     {
+        $this->validator=Validation::createValidator();
     }
 
     public function __invoke(Request $req): Invest
     {
-        // dd($req->files->get('investPictures'));
+
         $currentUser = $this->security->getUser();
         $invest = new Invest();
         $requestInvest = $req->request;
-        $investAuthorIri=$requestInvest->get(key:'author');
-        if($investAuthorIri){
-            $investAuthor=$this->iriConverter->getResourceFromIri($investAuthorIri);
-            if($investAuthor instanceof Company && $investAuthor->getAuthor()===$currentUser){
-                $invest->setAuthor($investAuthor);
+        $investAuthorIri = $requestInvest->get(key: 'author');
+        $invest->setAuthor(null);
+        if ($investAuthorIri) {
+            try {
+                $investAuthor = $this->iriConverter->getResourceFromIri($investAuthorIri);
+                if ($investAuthor instanceof Company && $investAuthor->getAuthor() === $currentUser) {
+                    $invest->setAuthor($investAuthor);
+                }
+            } catch (\Exception $e) {
+                
             }
         }
         $invest->setTitle($requestInvest->get(key: 'title'));
         $invest->setDescription($requestInvest->get(key: 'description'));
-        $invest->setNeed($requestInvest->get(key: 'need'));
-        $invest->setCollected($requestInvest->get(key: 'collected'));
+
+        if($requestInvest->get(key: 'need') && $requestInvest->get(key: 'currency')){
+            try {
+                $need = new Amount();
+                $need->setValue((int) $requestInvest->get(key: 'need'));
+                $need->setCurrency($this->iriConverter->getResourceFromIri($requestInvest->get(key: 'currency')));
+                $invest->setNeed($need);
+            } catch (\Exception $e) {
+    
+            }
+        }
+
+
+
+        if ($requestInvest->get(key: 'collected') && $requestInvest->get(key: 'currency')) {
+            try {
+                $collected = new Amount();
+                $collected->setValue((int) $requestInvest->get(key: 'collected'));
+                $collected->setCurrency($this->iriConverter->getResourceFromIri($requestInvest->get(key: 'currency')));
+                $invest->setCollected($collected);
+            }catch(\Exception $e){
+
+            }
+        }
         
 
-        if ($domains = $req->get('domains')) {
+
+        $domains = $req->get('domains');
+        
+        if (is_array($domains) && count($domains) > 0) {
             foreach ($domains as $domain) {
-                $invest->addDomain($this->iriConverter->getResourceFromIri($domain));
+                try{
+                    $invest->addDomain($this->iriConverter->getResourceFromIri($domain));
+                }catch(\Exception $e){
+                    
+                }
             }
         }
 
         if ($uploadedInvestPictures = $req->files->get('medias')) {
-            $i=0;
+            $i = 0;
             foreach ($uploadedInvestPictures as $uploadedInvestPicture) {
-                $i=$i+500;
+                $i = $i + 500;
                 $mediaObject = new InvestPicture();
                 $mediaObject->setCreatedAt((new \DateTimeImmutable())->modify("+$i second"));
                 $mediaObject->setFile($uploadedInvestPicture);

@@ -20,7 +20,7 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $ArrivalAt = null;
+    private ?\DateTimeInterface $arrivalAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $departureAt = null;
@@ -45,12 +45,12 @@ class Reservation
 
     public function getArrivalAt(): ?\DateTimeInterface
     {
-        return $this->ArrivalAt;
+        return $this->arrivalAt;
     }
 
     public function setArrivalAt(\DateTimeInterface $ArrivalAt): static
     {
-        $this->ArrivalAt = $ArrivalAt;
+        $this->arrivalAt = $ArrivalAt;
 
         return $this;
     }

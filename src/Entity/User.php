@@ -107,7 +107,7 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $discordId = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $highSchool = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -119,10 +119,10 @@ class User extends Author implements UserInterface, PasswordAuthenticatedUserInt
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $certification = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lisence = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $skills = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recommended::class)]

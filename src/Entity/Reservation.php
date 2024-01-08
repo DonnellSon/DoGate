@@ -6,9 +6,12 @@ use App\Entity\Author;
 use App\Entity\Travel;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ReservationRepository;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
+#[ApiResource(
+)]
 class Reservation
 {
     #[ORM\Id]

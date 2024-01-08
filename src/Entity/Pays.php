@@ -34,7 +34,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
             deserialize: false
         ),
         new Delete()
-    ]
+    ],
+        normalizationContext:[
+            'groups'=>['pays_read']
+        ]
 )]
 #[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups', 'overrideDefaultGroups' => false])]
 #[ApiFilter(SearchFilter::class, properties: ["name" => "partial", 
@@ -74,7 +77,7 @@ class Pays
     private Collection $companies;
 
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: City::class, orphanRemoval: true)]
-    #[Groups(['aside_read', 'pays_read'])]
+    #[Groups(['aside_read', 'pays_read', 'cities_read'])]
     private Collection $cities;
 
     #[ORM\OneToMany(mappedBy: 'pays', targetEntity: PaysPost::class)]
